@@ -1,0 +1,67 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "liveVisitors": {
+      ".read": "auth != null",
+      "$visitorId": {
+        ".write": true,
+        ".validate": "newData.val() === null || newData.hasChildren(['page','status','presence','lastActive'])"
+      }
+    },
+    "submittedApplications": {
+      ".read": "auth != null",
+      "$applicationId": {
+        ".write": "auth != null || !data.exists()",
+        ".validate": "newData.val() === null || newData.hasChildren(['name','phone','email','college','department','year','domain','referralCode','submittedAt'])"
+      }
+    },
+    "referrals": {
+      ".read": "auth != null",
+      "$referralCode": {
+        ".write": "auth != null || !data.exists()",
+        ".validate": "newData.val() === null || newData.hasChildren(['ownerApplicationId','ownerName','createdAt'])"
+      }
+    },
+    "referralCodes": {
+      ".read": false,
+      ".write": false,
+      "$referralCode": {
+        ".read": true,
+        ".write": "auth != null || !data.exists()",
+        ".validate": "newData.val() === null || newData.hasChildren(['ownerApplicationId','active','createdAt'])"
+      }
+    },
+    "referralJoins": {
+      ".read": "auth != null",
+      "$referralCode": {
+        "$applicationId": {
+          ".write": "auth != null || !data.exists()",
+          ".validate": "newData.val() === null || newData.hasChildren(['applicantName','joinedAt'])"
+        }
+      }
+    },
+    "referralEvents": {
+      ".read": "auth != null",
+      "$referralCode": {
+        "$eventId": {
+          ".write": "auth != null || !data.exists()",
+          ".validate": "newData.val() === null || newData.hasChildren(['type','createdAt'])"
+        }
+      }
+    },
+    "referralShares": {
+      ".read": "auth != null",
+      "$referralCode": {
+        "$shareId": {
+          ".write": "auth != null || !data.exists()",
+          ".validate": "newData.val() === null || newData.hasChildren(['applicationId','method','sharedAt'])"
+        }
+      }
+    },
+    "connectionTest": {
+      ".read": "auth != null",
+      ".write": true
+    }
+  }
+}

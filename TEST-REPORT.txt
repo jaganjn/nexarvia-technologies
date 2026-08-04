@@ -1,0 +1,16 @@
+SkillPath Integration Test Report
+Build: V13 live tracking and referral analytics
+
+Implemented:
+- Landing page and admin use the same Firebase configuration.
+- Live visitor records include entered fieldData, status, progress, current field, consent, and referral source.
+- Application, referral profile, referral code, referral join, and completion record are written atomically.
+- Firebase server timestamps are used for database records.
+- Referral visits, form starts, completed steps, submissions, and shares are tracked.
+- Admin reads referral events and shares, shows referral visits/starts/shares/joins and live referral source.
+- CSV exports separate student referral code and referred-by code.
+- Data listener errors are surfaced in the dashboard system-health panel.
+- SkillPath branding replaces remaining Apex labels in admin/login surfaces.
+
+Deployment requirement:
+Deploy firebase-rules.json before testing the public form.

@@ -1,0 +1,16 @@
+SKILLPATH V13 — DEPLOYMENT STEPS
+
+1. Deploy all website files to your existing Netlify/Firebase Hosting site.
+2. Open Firebase Console > Realtime Database > Rules.
+3. Replace the current rules with the contents of firebase-rules.json and publish them.
+4. Log in to admin.html once. This automatically backfills older referral profiles into the referral-code validation index.
+5. Test in two browser windows:
+   - Window 1: admin.html, logged in.
+   - Window 2/incognito: index.html, begin filling the form.
+6. Confirm the admin shows the visitor, live entered details, progress and referral source.
+7. Submit a test application and verify Recent Applications and Referral Performance.
+
+IMPORTANT
+- The public landing page and admin dashboard already use the same Firebase project from firebase.js.
+- Existing authenticated Firebase users can access the admin data under the included rules. For multiple staff accounts, use a UID allowlist or Firebase custom admin claims.
+- Live unfinished form fields are retained temporarily. Keep the updated privacy notice published.
