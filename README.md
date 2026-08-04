@@ -56,3 +56,7 @@ This build synchronises live application fields to the authenticated admin dashb
 Deploy `firebase-rules.json` to the same Firebase Realtime Database configured in `firebase.js`. When an authenticated administrator opens the updated dashboard, existing referral profiles are automatically backfilled into the public-safe `referralCodes` validation index. Open the dashboard once after deploying the new rules.
 
 The current rules treat every authenticated Firebase user as an administrator. For production with multiple accounts, replace this with a UID allowlist or Firebase custom admin claims.
+
+## V15 corporate shell
+
+The landing page now uses `corporate-shell.css` for its professional desktop/mobile header and multi-column footer. Official social URLs are configured once in `site-config.js`. Empty URLs are safely disabled until verified links are added. See `CORPORATE-HEADER-FOOTER-V15.txt`.

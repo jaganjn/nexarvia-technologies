@@ -14,3 +14,9 @@ IMPORTANT
 - The public landing page and admin dashboard already use the same Firebase project from firebase.js.
 - Existing authenticated Firebase users can access the admin data under the included rules. For multiple staff accounts, use a UID allowlist or Firebase custom admin claims.
 - Live unfinished form fields are retained temporarily. Keep the updated privacy notice published.
+
+V15 CORPORATE SHELL FILES
+- Upload corporate-shell.css.
+- Upload site-config.js.
+- Configure verified official social URLs in site-config.js before announcing the social channels.
+- Keep every existing V14/V13 Firebase and admin file in the same deployment folder.

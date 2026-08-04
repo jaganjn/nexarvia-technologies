@@ -14,3 +14,13 @@ Implemented:
 
 Deployment requirement:
 Deploy firebase-rules.json before testing the public form.
+
+V14 MOBILE PARITY VALIDATION — 04 Aug 2026
+- Added mobile-responsive.css after all landing-page embedded styles.
+- Added admin-mobile-responsive.css after dashboard.css.
+- Verified mobile admin navigation includes all desktop destinations and every anchor target exists.
+- Verified landing and admin viewport metadata.
+- Parsed new CSS files with tinycss2: no stylesheet parse errors.
+- Parsed HTML and verified linked local stylesheets exist.
+- Checked admin.js, login.js and extracted landing-page inline JavaScript with Node syntax checker.
+- Confirmed desktop CSS is unchanged outside max-width media overrides.

@@ -1,0 +1,30 @@
+SKILLPATH V15 — CORPORATE HEADER, FOOTER & SOCIAL CONFIGURATION
+
+WHAT WAS UPDATED
+- Professional corporate utility bar and sticky navigation.
+- Consistent desktop, tablet and mobile navigation.
+- Clear brand lockup, programme navigation, contact link and Apply Now action.
+- Full mobile menu with Programme, Projects, Domains, Process, FAQ, Contact, Privacy and Apply.
+- Corporate multi-column footer with company summary, student resources, legal links and application CTA.
+- LinkedIn, Instagram, YouTube, Facebook and WhatsApp social buttons.
+- Corporate admin header with mobile logo, live status, sound, clock and Public Portal action.
+- Admin footer with portal, privacy, terms and sign-out controls.
+
+CONFIGURE OFFICIAL SOCIAL LINKS
+Open site-config.js and paste only your verified official URLs:
+
+window.SKILLPATH_SITE_CONFIG = {
+  supportEmail: "",
+  social: {
+    linkedin: "https://...",
+    instagram: "https://...",
+    youtube: "https://...",
+    facebook: "https://...",
+    whatsapp: "https://wa.me/..."
+  }
+};
+
+Links left empty are intentionally disabled so the website never sends students to an unofficial or incorrect page.
+
+DEPLOYMENT
+Upload every file in this folder, including corporate-shell.css and site-config.js.
