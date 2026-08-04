@@ -1,6 +1,6 @@
-# SkillPath Final Production Landing Page
+# Nexarvia Technologies Final Production Landing Page
 
-This is the clean deployment package for the SkillPath 2026 internship landing page.
+This is the clean deployment package for the Nexarvia Technologies 2026 internship landing page.
 
 ## Deploy
 

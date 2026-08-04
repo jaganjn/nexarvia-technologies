@@ -1,8 +1,8 @@
 /*
-  SkillPath public contact and social configuration.
+  Nexarvia Technologies public contact and social configuration.
   Paste only verified official URLs. Empty values remain safely disabled.
 */
-window.SKILLPATH_SITE_CONFIG = {
+window.NEXARVIA_SITE_CONFIG = {
   supportEmail: "",
   social: {
     linkedin: "",
@@ -13,8 +13,8 @@ window.SKILLPATH_SITE_CONFIG = {
   }
 };
 
-(function applySkillPathSiteConfig() {
-  const getValue = (path) => path.split(".").reduce((value, key) => value && value[key], window.SKILLPATH_SITE_CONFIG);
+(function applyNexarviaSiteConfig() {
+  const getValue = (path) => path.split(".").reduce((value, key) => value && value[key], window.NEXARVIA_SITE_CONFIG);
 
   document.querySelectorAll("[data-config-link]").forEach((link) => {
     const value = String(getValue(link.dataset.configLink) || "").trim();
@@ -22,7 +22,7 @@ window.SKILLPATH_SITE_CONFIG = {
       link.href = value;
       link.removeAttribute("aria-disabled");
       link.removeAttribute("tabindex");
-      link.title = link.dataset.readyTitle || link.title || "Open official SkillPath channel";
+      link.title = link.dataset.readyTitle || link.title || "Open official Nexarvia Technologies channel";
       if (/^https?:/i.test(value)) {
         link.target = "_blank";
         link.rel = "noopener noreferrer";

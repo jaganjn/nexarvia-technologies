@@ -1,0 +1,13 @@
+NEXARVIA TECHNOLOGIES V17 — BRANDING VALIDATION
+
+Validated:
+- Landing page title, metadata, header, mobile navigation, footer and social labels use Nexarvia Technologies.
+- Admin dashboard title, sidebar logo, mobile brand, breadcrumb, footer, notification title and CSV filename are updated.
+- Admin login metadata, desktop logo, mobile logo and copyright are updated.
+- Privacy, terms and referral pages use Nexarvia Technologies.
+- Referral social preview and favicon assets are updated.
+- New referral codes use the NEX prefix; existing SKP referral codes remain accepted for compatibility.
+- Firebase configuration, database paths and authentication logic remain unchanged.
+- JavaScript syntax checks passed for admin.js, login.js, site-config.js and all inline index.html scripts.
+- CSS brace validation passed for corporate, mobile, admin and dashboard stylesheets.
+- All local HTML asset references resolve.

@@ -1,4 +1,4 @@
-SKILLPATH V15 — CORPORATE HEADER, FOOTER & SOCIAL CONFIGURATION
+NEXARVIA V15 — CORPORATE HEADER, FOOTER & SOCIAL CONFIGURATION
 
 WHAT WAS UPDATED
 - Professional corporate utility bar and sticky navigation.
@@ -13,7 +13,7 @@ WHAT WAS UPDATED
 CONFIGURE OFFICIAL SOCIAL LINKS
 Open site-config.js and paste only your verified official URLs:
 
-window.SKILLPATH_SITE_CONFIG = {
+window.NEXARVIA_SITE_CONFIG = {
   supportEmail: "",
   social: {
     linkedin: "https://...",

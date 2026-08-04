@@ -10,7 +10,7 @@
   Cache-Control: public, max-age=0, must-revalidate
   X-Robots-Tag: all
 
-/career-referral-preview-2026-v3.jpg
+/nexarvia-referral-preview-2026.jpg
   Cache-Control: public, max-age=31536000, immutable
   Content-Type: image/jpeg
   Access-Control-Allow-Origin: *

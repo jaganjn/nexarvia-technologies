@@ -1,4 +1,4 @@
-/* SkillPath V14 — mobile admin parity: every desktop section remains accessible */
+/* Nexarvia Technologies V14 — mobile admin parity: every desktop section remains accessible */
 @media (max-width: 820px){
   html,body{width:100%;max-width:100%;overflow-x:hidden}
   .app-shell,.workspace{width:100%;max-width:100%}
@@ -96,7 +96,7 @@
   .bottom-nav span{font-size:7px!important}
 }
 
-/* SkillPath V15 — corporate admin header/footer parity */
+/* Nexarvia Technologies V15 — corporate admin header/footer parity */
 @media (max-width: 820px){
   .corporate-admin-topbar{min-height:124px!important;grid-template-columns:auto auto minmax(0,1fr)!important;grid-template-rows:auto auto!important;padding:9px 11px!important}
   .corporate-admin-topbar .menu-toggle{grid-column:1!important;grid-row:1!important}

@@ -1,4 +1,4 @@
-SkillPath V15 Corporate Shell — Validation Report
+Nexarvia Technologies V15 Corporate Shell — Validation Report
 Date: August 4, 2026
 
 PASS

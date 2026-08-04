@@ -4,8 +4,8 @@ document.body.style.visibility = "hidden";
 const ACTIVE_MS = 75_000;
 const ABANDON_MS = 150_000;
 const RETAIN_MS = 24 * 60 * 60 * 1000;
-const ALERT_STORAGE_KEY = "skillpathAdminAlertSettingsV3";
-const SEEN_APPLICATIONS_KEY = "skillpathAdminSeenApplicationsV2";
+const ALERT_STORAGE_KEY = "nexarviaAdminAlertSettingsV17";
+const SEEN_APPLICATIONS_KEY = "nexarviaAdminSeenApplicationsV17";
 
 const el = id => document.getElementById(id);
 const E = {
@@ -500,9 +500,9 @@ function sendBrowserNotification(count, latest) {
     body: count === 1
       ? `${latest?.name || "A student"} • ${latest?.college || "New application"}`
       : "Open the admin dashboard to review the new submissions.",
-    icon: "skillpath-mark.png",
-    badge: "skillpath-mark.png",
-    tag: "skillpath-new-applications"
+    icon: "nexarvia-icon.png",
+    badge: "nexarvia-icon.png",
+    tag: "nexarvia-new-applications"
   });
 }
 
@@ -533,9 +533,9 @@ function handleNewApplications(nextApplications) {
   );
   sendBrowserNotification(newItems.length, newItems[0]);
 
-  document.title = `(${newItems.length}) New Application${newItems.length > 1 ? "s" : ""} — SkillPath Admin`;
+  document.title = `(${newItems.length}) New Application${newItems.length > 1 ? "s" : ""} — Nexarvia Technologies Admin`;
   window.setTimeout(() => {
-    document.title = "SkillPath — Admin Command Center";
+    document.title = "Nexarvia Technologies — Admin Command Center";
   }, 8000);
 
   return new Set(newItems.map(app => app.id));
@@ -616,7 +616,7 @@ function exportApplicationsCsv() {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = `skillpath-applications-${new Date().toISOString().slice(0, 10)}.csv`;
+  anchor.download = `nexarvia-applications-${new Date().toISOString().slice(0, 10)}.csv`;
   document.body.appendChild(anchor);
   anchor.click();
   anchor.remove();

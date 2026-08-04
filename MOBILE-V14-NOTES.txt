@@ -1,4 +1,4 @@
-SkillPath V14 Mobile Parity Update
+Nexarvia Technologies V14 Mobile Parity Update
 
 Landing page fixes:
 - Application wizard now fits 320px-820px screens without clipped step labels or horizontal overflow.

@@ -1,4 +1,4 @@
-SkillPath Integration Test Report
+Nexarvia Technologies Integration Test Report
 Build: V13 live tracking and referral analytics
 
 Implemented:
@@ -10,7 +10,7 @@ Implemented:
 - Admin reads referral events and shares, shows referral visits/starts/shares/joins and live referral source.
 - CSV exports separate student referral code and referred-by code.
 - Data listener errors are surfaced in the dashboard system-health panel.
-- SkillPath branding replaces remaining Apex labels in admin/login surfaces.
+- Nexarvia Technologies branding is applied across landing, admin and login surfaces.
 
 Deployment requirement:
 Deploy firebase-rules.json before testing the public form.

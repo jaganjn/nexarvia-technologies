@@ -1,0 +1,18 @@
+Nexarvia Technologies V17 Branding Update
+
+Updated:
+- Landing page title, metadata, header, mobile menu and footer
+- Admin dashboard title, sidebar, mobile header, notifications and CSV export
+- Admin login branding and copyright
+- Privacy notice, programme terms and referral preview
+- New referral codes now start with NEX (legacy SKP codes remain accepted)
+- Official logo assets added for light and dark surfaces
+
+Logo files:
+- nexarvia-logo.png — original dark wordmark for light backgrounds
+- nexarvia-logo-light.png — white wordmark for dark backgrounds
+- nexarvia-mark.png — symbol-only mark
+- nexarvia-icon.png — square app/favicon icon
+- nexarvia-referral-preview-2026.jpg — social sharing preview
+
+Firebase project configuration and database paths were not changed.

@@ -1,4 +1,4 @@
-SKILLPATH V13 — DEPLOYMENT STEPS
+NEXARVIA V13 — DEPLOYMENT STEPS
 
 1. Deploy all website files to your existing Netlify/Firebase Hosting site.
 2. Open Firebase Console > Realtime Database > Rules.
