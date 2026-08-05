@@ -1,0 +1,9 @@
+NEXARVIA V43 CONSOLE ERROR FIX
+
+Fixed:
+1. Removed Firebase Database SDK scripts from technology-services.html only.
+2. Technology enquiry now writes to Realtime Database using the Firebase REST API.
+3. Replaced bare db reference in site.js with window.db safety check.
+4. Removed invalid HTML phone pattern and added JavaScript phone validation.
+5. Google Sheets endpoint remains configured.
+6. Learning application page and its Firebase SDK workflow are unchanged.
