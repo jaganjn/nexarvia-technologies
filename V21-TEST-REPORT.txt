@@ -1,0 +1,12 @@
+NEXARVIA V21 TEST REPORT
+
+index.html: title=True, links=38
+learning.html: title=True, links=38
+technology-services.html: title=True, links=34
+admin.html: title=True, links=24
+login.html: title=True, links=2
+referral.html: title=True, links=1
+privacy.html: title=True, links=1
+terms.html: title=True, links=1
+
+Missing local references: 0

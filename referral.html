@@ -43,14 +43,14 @@
     <div class="preview-frame"><img src="nexarvia-referral-preview-2026.jpg" width="1200" height="630" alt="Nexarvia Technologies Career Learning Programmes"></div>
     <h1>Opening the application…</h1>
     <p>Build practical skills through structured learning, guided projects and career preparation.</p>
-    <a id="continueLink" href="/#apply">Continue to Application</a>
+    <a id="continueLink" href="learning.html#apply">Continue to Application</a>
   </main>
 
   <script>
     (function () {
       const query = new URLSearchParams(location.search);
       const ref = (query.get("ref") || "").trim();
-      const target = ref ? `/?ref=${encodeURIComponent(ref)}#apply` : "/#apply";
+      const target = ref ? `learning.html?ref=${encodeURIComponent(ref)}#apply` : "learning.html#apply";
       document.getElementById("continueLink").href = target;
       // Keep this crawler-friendly page available long enough for social preview bots.
       // Human visitors are redirected with JavaScript after a brief delay.
