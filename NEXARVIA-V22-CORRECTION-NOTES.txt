@@ -1,0 +1,9 @@
+NEXARVIA V22 — FOOTER, ACCESS AND MOTION CORRECTIONS
+
+1. Fixed Learning footer collision caused by legacy generic footer grid rules.
+2. Reset footer width, display, columns, spacing and mobile layout.
+3. Admin Portal link is visible only on Nexarvia Learning.
+4. Removed Admin links from Corporate Home and Technology Services.
+5. Added lightweight animated grids, nodes, sweep lines, card motion and scroll staggering.
+6. Motion never uses blur on text and respects reduced-motion preferences.
+7. Firebase, application, referral, admin authentication and database paths are unchanged.
