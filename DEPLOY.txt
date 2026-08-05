@@ -1,1 +1,1 @@
-Nexarvia V26 final responsive correction. Publish firebase-rules.json before testing forms. After deployment, hard refresh once (Ctrl+Shift+R).
+Nexarvia V31: approved premium gateway implemented; duplicate selector removed.
