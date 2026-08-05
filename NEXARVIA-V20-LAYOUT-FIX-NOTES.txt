@@ -1,0 +1,27 @@
+NEXARVIA TECHNOLOGIES V20 — SPACIOUS LANDSCAPE LAYOUT FIX
+
+Purpose
+- Corrects V19 blur, soft text, narrow portrait-style sections, congested cards and clipping.
+- Preserves the landing-page form, Firebase tracking, referral system, admin dashboard and login.
+
+Main corrections
+1. Increased desktop content width from approximately 1,200px to a responsive maximum of 1,400px.
+2. Rebuilt the hero as a wider landscape two-column composition.
+3. Removed text blur from scroll reveals and made content visible even if animation JavaScript fails.
+4. Removed glass/backdrop blur from content cards that could render text softly.
+5. Removed 3D scale/tilt effects from content surfaces.
+6. Changed tall narrow project cards into wide 2×2 cards on desktop.
+7. Changed outcome cards to three wider columns on desktop.
+8. Increased section spacing, card padding, text sizes and line height.
+9. Expanded and simplified the application form layout.
+10. Improved tablet and mobile breakpoints and removed heavy background animation on mobile.
+11. Retained subtle corporate background motion without placing effects over text.
+12. Added horizontal containment safeguards to prevent page overflow.
+
+Files changed
+- index.html
+- nexarvia-layout-v20.css (new)
+
+Deployment
+Replace the previous project with this package, commit all files, push to GitHub and allow Vercel to redeploy.
+Use a hard refresh after deployment: Ctrl + Shift + R.
