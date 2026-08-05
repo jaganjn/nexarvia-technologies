@@ -969,3 +969,29 @@ function resetDashboard() {
     ]);
   }
 }
+
+
+/* =========================================================
+   FINAL EXTENSION — REAL-TIME INQUIRY CHARTS, OPERATIONS
+   NOTIFICATION CENTRE AND PUBLIC WEBSITE ANNOUNCEMENTS
+   ========================================================= */
+(() => {
+  const q=id=>document.getElementById(id);
+  const safe=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+  const ms=v=>typeof v==='number'?v:(Date.parse(v||'')||0);
+  let apps=[], inquiries=[], announcements=[];
+  const seenKey='nexarviaAdminNotificationSeenFinal';
+
+  function renderInquiryAnalytics(){
+    const chart=q('technologyInquiryRealtimeChart'),breakdown=q('technologyServiceBreakdown');if(!chart||!breakdown)return;
+    const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-(6-i));return d});
+    const values=days.map(d=>inquiries.filter(x=>{const t=ms(x.submittedAt);return t>=d.getTime()&&t<d.getTime()+86400000}).length);const max=Math.max(1,...values);
+    chart.innerHTML=values.some(Boolean)?days.map((d,i)=>`<div class="realtime-bar"><i style="height:${Math.max(4,Math.round(values[i]/max*180))}px"><span>${values[i]}</span></i><small>${d.toLocaleDateString('en-IN',{weekday:'short'})}</small></div>`).join(''):'<p class="empty">No enquiry submissions in the last seven days.</p>';
+    const groups={};inquiries.forEach(x=>{const k=x.service||'Not specified';groups[k]=(groups[k]||0)+1});const entries=Object.entries(groups).sort((a,b)=>b[1]-a[1]).slice(0,7),top=Math.max(1,...entries.map(x=>x[1]));breakdown.innerHTML=entries.length?entries.map(([name,count])=>`<article><strong>${safe(name)}</strong><div><i style="width:${Math.round(count/top*100)}%"></i></div><b>${count}</b></article>`).join(''):'<p class="empty">No service-demand data yet.</p>';
+  }
+  function combined(){return [...apps.map(x=>({type:'Learning application',title:x.name||'New learner application',message:`${x.domain||'Programme interest'} · ${x.college||x.currentStatus||'Learner profile'}`,time:ms(x.submittedAtMs||x.submittedAt)})),...inquiries.map(x=>({type:'Technology enquiry',title:x.fullName||'New business enquiry',message:`${x.service||'Service requirement'} · ${x.organisation||x.reference||''}`,time:ms(x.submittedAt)}))].sort((a,b)=>b.time-a.time).slice(0,20)}
+  function renderNotifications(){const list=q('adminNotificationList'),count=q('adminNotificationCount');if(!list||!count)return;const items=combined();list.innerHTML=items.length?items.map(x=>`<article class="admin-alert-item"><small class="admin-alert-type">${safe(x.type)}</small><strong>${safe(x.title)}</strong><p>${safe(x.message)}</p><small>${x.time?new Intl.DateTimeFormat('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(x.time)):'—'}</small></article>`).join(''):'<div class="admin-alert-empty">No applications or enquiries yet.</div>';let seen=0;try{seen=Number(localStorage.getItem(seenKey)||0)}catch{}const unread=items.filter(x=>x.time>seen).length;count.textContent=String(Math.min(unread,99));count.classList.toggle('has-items',unread>0)}
+  function renderAnnouncements(){const list=q('announcementList');if(!list)return;list.innerHTML=announcements.length?announcements.sort((a,b)=>ms(b.createdAt)-ms(a.createdAt)).map(x=>`<article class="announcement-item"><div><strong>${safe(x.title||'Notice')}</strong><p>${safe(x.message||'')}</p><small>${safe(x.audience||'all')} · ${new Date(ms(x.createdAt)||Date.now()).toLocaleString('en-IN')}</small></div><button type="button" data-delete-announcement="${safe(x.id)}">Delete</button></article>`).join(''):'<p class="empty">No public announcements.</p>'}
+  function setupUi(){const btn=q('adminNotificationButton'),drawer=q('adminNotificationDrawer'),close=q('adminNotificationClose');const set=open=>{drawer?.classList.toggle('is-open',open);drawer?.setAttribute('aria-hidden',String(!open));if(open){try{localStorage.setItem(seenKey,String(Date.now()))}catch{}renderNotifications()}};btn?.addEventListener('click',()=>set(!drawer?.classList.contains('is-open')));close?.addEventListener('click',()=>set(false));q('announcementForm')?.addEventListener('submit',async e=>{e.preventDefault();const title=q('announcementTitle').value.trim(),message=q('announcementMessage').value.trim(),audience=q('announcementAudience').value;if(!title||!message)return;await db.ref('publicAnnouncements').push({title,message,audience,active:true,createdAt:firebase.database.ServerValue.TIMESTAMP});e.target.reset();if(typeof showToast==='function')showToast('Website notice published',audience,'success')});q('announcementList')?.addEventListener('click',e=>{const id=e.target?.dataset?.deleteAnnouncement;if(id&&confirm('Delete this website notice?'))db.ref(`publicAnnouncements/${id}`).remove()})}
+  auth.onAuthStateChanged(user=>{if(!user)return;setupUi();db.ref('submittedApplications').on('value',s=>{apps=Object.values(s.val()||{});renderNotifications()});db.ref('technologyServiceInquiries').on('value',s=>{inquiries=Object.values(s.val()||{});renderInquiryAnalytics();renderNotifications()});db.ref('publicAnnouncements').on('value',s=>{announcements=Object.entries(s.val()||{}).map(([id,x])=>({id,...x}));renderAnnouncements()})});
+})();

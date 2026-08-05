@@ -84,6 +84,13 @@
           ".validate": "newData.val() === null || (newData.isString() && newData.val().length >= 20 && newData.val().length <= 6000)"
         }
       }
+    },
+    "publicAnnouncements": {
+      ".read": true,
+      ".write": "auth != null",
+      "$announcementId": {
+        ".validate": "newData.val() === null || newData.hasChildren(['title','message','audience','active','createdAt'])"
+      }
     }
   }
 }
