@@ -2,9 +2,11 @@
   'use strict';
 
   // Technology Services only: this script never attaches to the Learning application form.
-  if (document.body?.dataset?.divisionPage !== 'technology') return;
+  const divisionPage = document.body?.dataset?.divisionPage;
+  if (!['technology', 'services'].includes(divisionPage)) return;
   const form = document.getElementById('technologyInquiryForm');
   if (!form || form.id === 'internshipForm') return;
+  document.documentElement.dataset.technologyInquiryReady = 'true';
 
   const submitButton = document.getElementById('technologyInquirySubmit');
   const message = document.getElementById('technologyInquiryMessage');
