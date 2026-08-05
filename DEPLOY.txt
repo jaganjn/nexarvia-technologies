@@ -1,0 +1,7 @@
+NEXARVIA TECHNOLOGIES V25 FINAL
+
+1. Upload all files to the repository root.
+2. Publish firebase-rules.json in Firebase Realtime Database Rules.
+3. Add the Google Apps Script web-app URL to site-config.js to sync Technology Services enquiries with Google Sheets.
+4. Test index.html, learning.html, technology-services.html, login.html and admin.html.
+5. Hard refresh after deployment (Ctrl+Shift+R).
