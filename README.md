@@ -60,3 +60,9 @@ The current rules treat every authenticated Firebase user as an administrator. F
 ## V15 corporate shell
 
 The landing page now uses `corporate-shell.css` for its professional desktop/mobile header and multi-column footer. Official social URLs are configured once in `site-config.js`. Empty URLs are safely disabled until verified links are added. See `CORPORATE-HEADER-FOOTER-V15.txt`.
+
+## V18 Trust-First Redevelopment
+The public landing page was redeveloped with clearer programme information,
+responsible marketing language, a student-portal preview, stronger mobile
+responsiveness, and a dedicated Trust Centre. Firebase, referrals, admin login,
+and application tracking remain on the existing V17 data model.
