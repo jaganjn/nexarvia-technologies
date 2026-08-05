@@ -17,3 +17,9 @@ BEFORE DEPLOYMENT
 2. Add the Google Sheets Web App URL to site-config.js when ready.
 3. Upload the contents of this folder to the existing repository.
 4. Test Learning applications, Technology Service enquiries, admin login, announcements and mobile navigation on the live domain.
+
+
+V24 MOBILE WIDE-VIEW UPDATE
+- Mobile content rails use horizontal scroll-snap for a landscape-style experience.
+- Homepage branch visual includes a recurring shooting-star transition across the Nexarvia logo.
+- Mobile animations retain the desktop visual language while remaining touch-friendly.

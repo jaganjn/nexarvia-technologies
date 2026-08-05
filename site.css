@@ -198,3 +198,176 @@ body.nx-learning-page{background:#f4f7fc!important}.nx-learning-page>.v22-motion
 @media(max-width:950px){.nx-container{width:calc(100% - 38px)}.nx24-home-hero{background:#fff}.nx24-home-grid,.nx24-division-grid,.nx24-section-head,.nx24-horizontal-split,.nx24-portal-preview,.nx-inquiry-layout{grid-template-columns:1fr!important}.nx24-branch-visual,.nx24-process-visual{min-height:560px}.nx24-sticky-copy{position:static}.nx24-section,.nx24-horizontal-section{padding:86px 0}.nx24-path-grid,.nx24-mv-grid{grid-template-columns:1fr}.nx24-landscape-grid{grid-template-columns:repeat(2,1fr)}.nx24-learning-page .application-zone{grid-template-columns:1fr!important;padding:86px 20px!important}.nx24-learning-page .application-intro{position:static!important}.nx24-home-copy h1,.nx24-division-copy h1{font-size:clamp(48px,8vw,70px)}}
 @media(max-width:650px){.nx-container{width:calc(100% - 28px)}.nx24-home-hero,.nx24-division-hero{padding:52px 0 66px}.nx24-home-copy h1,.nx24-division-copy h1{font-size:clamp(40px,12vw,55px);letter-spacing:-.048em}.nx24-home-copy>p,.nx24-division-copy>p{font-size:15px}.nx24-mission-line{grid-template-columns:1fr}.nx24-branch-visual,.nx24-process-visual{min-height:500px;border-radius:24px}.nx24-parent-node{width:150px;height:150px}.nx24-parent-node img{width:57px}.nx24-route{width:150px;padding:13px}.nx24-route strong{font-size:13px}.nx24-route small{font-size:8px}.nx24-route--learning{left:12px;top:56px}.nx24-route--services{right:12px;bottom:54px}.nx24-branch-line{display:none}.nx24-visual-caption{font-size:7px}.nx24-section,.nx24-horizontal-section{padding:66px 0}.nx24-section-head{gap:22px;margin-bottom:34px}.nx24-section-head h2{font-size:34px}.nx24-section-head p{font-size:14px}.nx24-path-card{min-height:390px;padding:27px}.nx24-path-card h3{margin-top:64px;font-size:36px}.nx24-path-action{left:27px}.nx24-mv-card{padding:27px}.nx24-values,.nx24-landscape-grid{grid-template-columns:1fr}.nx24-process-visual{padding:22px}.nx24-visual-steps{margin-top:38px}.nx24-wide-journey{grid-template-columns:1fr 1fr}.nx24-info-banner{padding:26px 22px}.nx24-info-banner h2{font-size:29px}.nx24-learning-page .application-zone{padding:66px 14px!important}.nx24-learning-page .form-grid{grid-template-columns:1fr!important}.nx-notification-panel{right:10px;top:76px;width:calc(100% - 20px)}.nx-header-tools{gap:6px}.nx-notification-button{width:42px;height:42px}.nx-proof-row{display:grid}.nx-footer-switch{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.nx24-branch-visual::before,.nx24-parent-node,.nx24-route,.nx24-branch-line::after,.nx24-path-motion,.nx24-visual-step,.nx24-services-page .nx24-journey-step,.nx24-services-page .nx24-step-number{animation:none!important}}
+
+/* =========================================================
+   V24 MOBILE WIDE-VIEW + SHOOTING STAR REFINEMENT
+   Keeps mobile layouts visually horizontal through compact
+   two-column compositions and touch-friendly scroll-snap rails.
+   ========================================================= */
+.nx24-branch-visual::after{
+  content:"";
+  position:absolute;
+  z-index:6;
+  width:150px;
+  height:3px;
+  left:-180px;
+  top:45%;
+  border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),#ffffff 72%,#83e8ff);
+  box-shadow:0 0 9px #fff,0 0 22px rgba(87,211,255,.95),0 0 44px rgba(51,137,255,.6);
+  transform:rotate(-18deg);
+  animation:nx24ShootingStar 5.8s cubic-bezier(.32,.02,.18,1) infinite;
+  pointer-events:none;
+}
+.nx24-parent-node::after{
+  content:"";
+  position:absolute;
+  inset:-13px;
+  border:1px solid rgba(117,224,255,.18);
+  border-radius:50%;
+  animation:nx24LogoHalo 3.2s ease-in-out infinite;
+}
+@keyframes nx24ShootingStar{
+  0%,12%{left:-190px;top:66%;opacity:0;transform:rotate(-18deg) scaleX(.55)}
+  16%{opacity:1}
+  52%{left:calc(50% - 75px);top:47%;opacity:1;transform:rotate(-18deg) scaleX(1.15)}
+  84%{opacity:.95}
+  100%{left:calc(100% + 50px);top:28%;opacity:0;transform:rotate(-18deg) scaleX(.7)}
+}
+@keyframes nx24LogoHalo{50%{inset:-23px;border-color:rgba(117,224,255,.04);box-shadow:0 0 34px rgba(76,198,255,.12)}}
+
+@media(max-width:650px){
+  /* Hero stays wide-looking: copy + visual become a compact landscape sequence. */
+  .nx24-home-grid,.nx24-division-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:28px!important}
+  .nx24-home-copy,.nx24-division-copy{max-width:none}
+  .nx24-home-copy h1,.nx24-division-copy h1{max-width:94%;font-size:clamp(37px,10.5vw,50px);line-height:1.02}
+  .nx24-home-copy>p,.nx24-division-copy>p{max-width:95%;font-size:14px;line-height:1.68}
+
+  /* Compact horizontal proof and mission rails instead of long vertical stacking. */
+  .nx24-mission-line,.nx24-proof,.nx-proof-row{
+    display:flex!important;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    gap:11px;
+    padding:2px 2px 10px;
+    margin-right:-14px;
+    scrollbar-width:none;
+  }
+  .nx24-mission-line::-webkit-scrollbar,.nx24-proof::-webkit-scrollbar,.nx-proof-row::-webkit-scrollbar{display:none}
+  .nx24-mission-line>div,.nx24-proof>span,.nx-proof-row>span{
+    flex:0 0 min(78vw,290px);
+    scroll-snap-align:start;
+  }
+
+  /* Branch visual keeps both pathways visible at once on mobile. */
+  .nx24-branch-visual{min-height:390px;border-radius:22px}
+  .nx24-parent-node{width:122px;height:122px;top:50%}
+  .nx24-parent-node img{width:47px}
+  .nx24-parent-node strong{font-size:11px}.nx24-parent-node small{font-size:6px}
+  .nx24-route{width:132px;min-height:92px;padding:12px;border-radius:15px}
+  .nx24-route strong{font-size:11px;line-height:1.2}.nx24-route small{font-size:7px;line-height:1.35}
+  .nx24-route--learning{left:9px;top:34px}
+  .nx24-route--services{right:9px;bottom:35px}
+  .nx24-branch-line{display:block;width:34%!important;height:2px}
+  .nx24-line-learning{left:27%;top:39%;transform:rotate(24deg)}
+  .nx24-line-services{left:50%;top:61%;transform:rotate(24deg)}
+  .nx24-visual-caption{left:14px;right:14px;bottom:11px;font-size:5.8px}
+  .nx24-branch-visual::after{width:92px;height:2px;animation-duration:4.8s}
+
+  /* Division cards are a horizontal swipe deck with desktop-like width. */
+  .nx24-path-grid{
+    display:flex!important;
+    gap:14px;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    padding:4px 14px 16px 0;
+    margin-right:-14px;
+    scrollbar-width:none;
+  }
+  .nx24-path-grid::-webkit-scrollbar{display:none}
+  .nx24-path-card{
+    flex:0 0 86vw;
+    min-height:320px;
+    padding:25px;
+    scroll-snap-align:center;
+  }
+  .nx24-path-card h3{margin:52px 0 14px;font-size:33px}
+  .nx24-path-card p{font-size:13px;line-height:1.65}
+  .nx24-path-action{left:25px;bottom:25px;font-size:12px}
+  .nx24-path-motion{width:190px;height:190px;right:-54px;top:28px}
+
+  /* Mission, values and landscape cards preserve horizontal rhythm. */
+  .nx24-mv-grid,.nx24-values,.nx24-landscape-grid,.nx-card-grid{
+    display:flex!important;
+    gap:14px;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    padding:4px 14px 14px 0;
+    margin-right:-14px;
+    scrollbar-width:none;
+  }
+  .nx24-mv-grid::-webkit-scrollbar,.nx24-values::-webkit-scrollbar,.nx24-landscape-grid::-webkit-scrollbar,.nx-card-grid::-webkit-scrollbar{display:none}
+  .nx24-mv-card,.nx24-value,.nx24-landscape-card,.nx-card{
+    flex:0 0 82vw;
+    min-height:220px;
+    scroll-snap-align:center;
+  }
+
+  /* Process and service journeys become horizontal swipe timelines. */
+  .nx24-wide-journey,.nx-process{
+    display:flex!important;
+    gap:13px;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    padding:12px 10px 20px;
+    margin:0 -10px;
+    scrollbar-width:none;
+  }
+  .nx24-wide-journey::-webkit-scrollbar,.nx-process::-webkit-scrollbar{display:none}
+  .nx24-wide-journey::before{display:none}
+  .nx24-journey-step,.nx-process article{
+    flex:0 0 43vw;
+    min-width:142px;
+    min-height:165px;
+    padding:18px 13px!important;
+    border:1px solid #d7e4f0;
+    border-radius:18px;
+    background:#fff;
+    scroll-snap-align:center;
+    box-shadow:0 14px 34px rgba(7,35,66,.07);
+  }
+  .nx24-step-number{width:54px;height:54px;margin-bottom:13px}
+  .nx24-journey-step p{font-size:9px}
+
+  /* Wide visuals use a cropped landscape canvas instead of tall portrait panels. */
+  .nx24-process-visual,.nx-learning-graphic,.nx-service-graphic{min-height:360px;border-radius:22px}
+  .nx24-process-visual{padding:18px}
+  .nx24-visual-steps{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:30px}
+  .nx24-visual-step{grid-template-columns:34px 1fr;padding:10px;gap:8px}
+  .nx24-visual-step b{width:32px;height:32px;border-radius:9px}
+  .nx24-visual-step strong{font-size:10px}.nx24-visual-step small{font-size:7px}
+
+  /* Sections feel less like a form: tighter height and alternating side flow. */
+  .nx24-section,.nx24-horizontal-section{padding:58px 0}
+  .nx24-section-head{margin-bottom:26px}
+  .nx24-section-head h2{font-size:31px;line-height:1.08}
+  .nx24-section-head p{font-size:13px;line-height:1.65}
+  .nx24-horizontal-split{gap:24px}
+  .nx24-sticky-copy h2{font-size:31px}
+
+  /* Form stays usable, but visually contained as one card. */
+  .nx24-learning-page .application-zone,.nx-inquiry-layout{padding-top:54px!important;padding-bottom:54px!important}
+  .nx-inquiry-form,.nx24-learning-page .application-card{border-radius:20px!important}
+}
+
+@media(max-width:380px){
+  .nx24-path-card{flex-basis:89vw}
+  .nx24-mv-card,.nx24-value,.nx24-landscape-card,.nx-card{flex-basis:86vw}
+  .nx24-route{width:118px}
+  .nx24-parent-node{width:108px;height:108px}
+  .nx24-branch-visual{min-height:360px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .nx24-branch-visual::after,.nx24-parent-node::after{animation:none!important}
+}
