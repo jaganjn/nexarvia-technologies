@@ -38,6 +38,7 @@ let referralJoins = {};
 let referralEvents = {};
 let referralShares = {};
 let friendRows = [];
+let technologyInquiries = [];
 let started = false;
 let initialApplicationSnapshotLoaded = false;
 let soundUnlocked = false;
@@ -719,9 +720,92 @@ function handleDataError(label, error, section) {
   showToast(`${label} unavailable`, "Deploy the included Firebase rules and confirm this admin account has access.", "error", 6500);
 }
 
+
+
+const TECHNOLOGY_INQUIRY_STATUSES = [
+  ["new", "New"], ["contacted", "Contacted"], ["qualified", "Qualified"],
+  ["requirements_collected", "Requirements Collected"], ["proposal_pending", "Proposal Pending"],
+  ["proposal_sent", "Proposal Sent"], ["in_discussion", "In Discussion"],
+  ["confirmed", "Confirmed"], ["closed", "Closed"], ["not_proceeding", "Not Proceeding"]
+];
+
+function technologyStatusLabel(status) {
+  return TECHNOLOGY_INQUIRY_STATUSES.find(([value]) => value === status)?.[1] || "New";
+}
+
+function renderTechnologyInquiries(rows = technologyInquiries) {
+  const body = el("technologyInquiryBody");
+  if (!body) return;
+  const search = String(el("technologyInquirySearch")?.value || "").trim().toLowerCase();
+  const filtered = rows.filter(item => !search || [item.reference, item.fullName, item.organisation, item.email, item.phone, item.service, item.requirements]
+    .some(value => String(value || "").toLowerCase().includes(search)));
+
+  if (!filtered.length) {
+    body.innerHTML = '<tr><td colspan="8" class="empty">No matching technology inquiries…</td></tr>';
+  } else {
+    body.innerHTML = filtered.map(item => {
+      const options = TECHNOLOGY_INQUIRY_STATUSES.map(([value, label]) => `<option value="${value}" ${item.status === value ? "selected" : ""}>${label}</option>`).join("");
+      return `<tr>
+        <td><code class="inquiry-reference">${esc(item.reference || item.id)}</code></td>
+        <td class="inquiry-client"><strong>${esc(item.fullName || "—")}</strong><small>${esc(item.organisation || item.email || "—")}</small></td>
+        <td>${esc(item.service || "—")}</td><td>${esc(item.budget || "—")}</td><td>${esc(item.timeline || "—")}</td>
+        <td>${fmt(item.submittedAt)}</td>
+        <td><select class="inquiry-status-select" data-inquiry-status="${esc(item.id)}">${options}</select></td>
+        <td><button class="inquiry-detail-toggle" type="button" data-inquiry-toggle="${esc(item.id)}">View</button></td>
+      </tr><tr class="inquiry-detail-row"><td colspan="8"><div class="inquiry-detail-card" id="inquiry-detail-${esc(item.id)}">
+        <div><small>Email</small><strong>${esc(item.email || "—")}</strong></div><div><small>Phone</small><strong>${esc(item.phone || "—")}</strong></div>
+        <div><small>Location</small><strong>${esc(item.location || "—")}</strong></div><div><small>Preferred Contact</small><strong>${esc(item.preferredContact || "—")}</strong></div>
+        <div><small>Project Type</small><strong>${esc(item.projectType || "—")}</strong></div><div><small>Budget</small><strong>${esc(item.budget || "—")}</strong></div>
+        <div><small>Timeline</small><strong>${esc(item.timeline || "—")}</strong></div><div><small>Current Status</small><strong>${esc(technologyStatusLabel(item.status))}</strong></div>
+        <div class="wide"><small>Requirement</small><p>${esc(item.requirements || "—")}</p></div>
+        <div class="wide"><small>Internal Notes</small><textarea data-inquiry-notes="${esc(item.id)}" placeholder="Add internal notes for follow-up…">${esc(item.internalNotes || "")}</textarea><button class="panel-action" type="button" data-save-inquiry-notes="${esc(item.id)}" style="margin-top:9px">Save Notes</button></div>
+      </div></td></tr>`;
+    }).join("");
+  }
+  const all = technologyInquiries;
+  if (el("technologyInquiryTotal")) el("technologyInquiryTotal").textContent = all.length;
+  if (el("technologyInquiryNew")) el("technologyInquiryNew").textContent = all.filter(x => !x.status || x.status === "new").length;
+  if (el("technologyInquiryQualified")) el("technologyInquiryQualified").textContent = all.filter(x => ["qualified","requirements_collected"].includes(x.status)).length;
+  if (el("technologyInquiryProposal")) el("technologyInquiryProposal").textContent = all.filter(x => ["proposal_pending","proposal_sent","in_discussion"].includes(x.status)).length;
+  if (el("technologyInquiryConfirmed")) el("technologyInquiryConfirmed").textContent = all.filter(x => x.status === "confirmed").length;
+}
+
+function setupTechnologyInquiryListener() {
+  db.ref("technologyServiceInquiries").on("value", snapshot => {
+    technologyInquiries = Object.entries(snapshot.val() || {}).map(([id, item]) => ({ id, ...item })).sort((a,b) => asMs(b.submittedAt) - asMs(a.submittedAt));
+    renderTechnologyInquiries(); setHealth("inquiries", true, "Receiving data");
+  }, error => handleDataError("Technology inquiries", error, "inquiries"));
+}
+
+async function updateTechnologyInquiryStatus(id, status) {
+  await db.ref(`technologyServiceInquiries/${id}`).update({status, updatedAt: firebase.database.ServerValue.TIMESTAMP});
+  showToast("Inquiry status updated", technologyStatusLabel(status), "success");
+}
+
+async function saveTechnologyInquiryNotes(id) {
+  const notes = document.querySelector(`[data-inquiry-notes="${CSS.escape(id)}"]`)?.value || "";
+  await db.ref(`technologyServiceInquiries/${id}`).update({internalNotes: notes.trim().slice(0,4000), updatedAt: firebase.database.ServerValue.TIMESTAMP});
+  showToast("Inquiry notes saved", id, "success");
+}
+
+function exportTechnologyInquiriesCsv() {
+  if (!technologyInquiries.length) return showToast("Nothing to export", "No Technology Services inquiries are available.", "info");
+  const headers = ["Reference","Full Name","Organisation","Email","Phone","Location","Service","Project Type","Budget","Timeline","Preferred Contact","Requirements","Status","Submitted At","Internal Notes"];
+  const quote = value => `"${String(value ?? "").replace(/"/g, '""')}"`;
+  const lines = [headers.map(quote).join(","), ...technologyInquiries.map(i => [i.reference,i.fullName,i.organisation,i.email,i.phone,i.location,i.service,i.projectType,i.budget,i.timeline,i.preferredContact,i.requirements,technologyStatusLabel(i.status),new Date(asMs(i.submittedAt)||0).toISOString(),i.internalNotes].map(quote).join(","))];
+  const blob = new Blob(["\ufeff" + lines.join("\n")], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `Nexarvia-Technology-Inquiries-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
+  showToast("CSV exported", `${technologyInquiries.length} inquiries downloaded.`, "success");
+}
+
+function deleteTechnologyInquiries() {
+  return del("technologyServiceInquiries", "Delete all Technology Services inquiries?");
+}
+
 function listeners() {
   if (started) return;
   started = true;
+  setupTechnologyInquiryListener();
 
   const visitorRoot = db.ref("liveVisitors");
   const applyVisitor = snapshot => {
@@ -817,6 +901,10 @@ function setupUI() {
 
   el("refreshDashboardButton")?.addEventListener("click", performFullRefresh);
   el("exportApplicationsButton")?.addEventListener("click", exportApplicationsCsv);
+  el("exportTechnologyInquiries")?.addEventListener("click", exportTechnologyInquiriesCsv);
+  el("technologyInquirySearch")?.addEventListener("input", () => renderTechnologyInquiries());
+  el("technologyInquiryBody")?.addEventListener("change", event => { const id = event.target?.dataset?.inquiryStatus; if (id) updateTechnologyInquiryStatus(id, event.target.value).catch(error => showToast("Status update failed", error.message, "error")); });
+  el("technologyInquiryBody")?.addEventListener("click", event => { const toggleId = event.target?.dataset?.inquiryToggle; if (toggleId) el(`inquiry-detail-${toggleId}`)?.classList.toggle("is-open"); const saveId = event.target?.dataset?.saveInquiryNotes; if (saveId) saveTechnologyInquiryNotes(saveId).catch(error => showToast("Notes update failed", error.message, "error")); });
   setupNotificationSettings();
 
   db.ref(".info/connected").on("value", snapshot => {
@@ -876,7 +964,8 @@ function resetDashboard() {
       db.ref("referralCodes").remove(),
       db.ref("referralJoins").remove(),
       db.ref("referralEvents").remove(),
-      db.ref("referralShares").remove()
+      db.ref("referralShares").remove(),
+      db.ref("technologyServiceInquiries").remove()
     ]);
   }
 }

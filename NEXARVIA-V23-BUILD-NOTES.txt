@@ -1,0 +1,15 @@
+NEXARVIA V23 — CORPORATE ECOSYSTEM BUILD
+
+Implemented:
+- Strictly separated Corporate, Learning, and Technology Services navigation/footer content.
+- Rebuilt responsive navigation with accessible mobile drawer, overlay, Escape/outside-click closing, and scroll lock.
+- Animated corporate ecosystem and Learning-to-Technology transition.
+- New CSS-based learning and business graphics; no text blur or heavy 3D effects.
+- Technology Services enquiry form with validation, honeypot, cooldown, Firebase server timestamp, and unique reference.
+- Separate technologyServiceInquiries Firebase path.
+- Admin dashboard inquiry pipeline, search, status updates, internal notes, metrics, and CSV export.
+- Service-specific terms and expanded privacy notice.
+- Responsive layouts from 320px through large desktop screens.
+
+DEPLOYMENT REQUIREMENT:
+Publish firebase-rules.json (or Nexarvia-V23-Realtime-Database-Rules.json) in Firebase Realtime Database Rules before testing the enquiry form.
