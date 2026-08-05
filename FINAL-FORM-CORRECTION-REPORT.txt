@@ -1,0 +1,20 @@
+NEXARVIA V40 — FINAL FORM CORRECTION REPORT
+
+ROOT CAUSE
+The Technology Services form contained method="post" and action="#inquiry". If the external enquiry JavaScript did not load or attach, the browser sent a native POST request to the static Vercel page. Vercel does not accept POST on a static HTML route, so it returned HTTP 405.
+
+CORRECTIONS
+1. Removed native action and method from technologyInquiryForm.
+2. Added onsubmit="return false;" as a last-resort browser fail-safe.
+3. Changed the enquiry button from type="submit" to type="button".
+4. Added a dedicated click handler and retained the keyboard submit handler.
+5. Both handlers call the same validated Firebase/Google Sheets submission function.
+6. Updated script query versions to v40 to bypass cached V39 files.
+7. The Nexarvia Learning form, its script, Firebase path, and existing Google Sheets endpoint were not modified.
+
+SEPARATE DATA PATHS
+Learning applications: submittedApplications
+Technology enquiries: technologyServiceInquiries
+
+TECHNOLOGY GOOGLE SHEETS ENDPOINT
+https://script.google.com/macros/s/AKfycbwiJn1WkP-3xox6j0f0MRHm_KU6ovrdELlokPcXxZ-EqF0tAUitHV7tJvE2X2-bzubr/exec

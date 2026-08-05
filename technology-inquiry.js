@@ -60,10 +60,10 @@
     return { configured: true, sent: true };
   };
 
-  form.addEventListener('submit', async (event) => {
+  const handleSubmission = async (event) => {
     // Always stop the browser's native form navigation/reload.
-    event.preventDefault();
-    event.stopPropagation();
+    event?.preventDefault?.();
+    event?.stopPropagation?.();
 
     if (submitting) return;
     if (message) {
@@ -165,7 +165,12 @@
     } finally {
       setSubmitting(false);
     }
-  }, { capture: true });
+  };
+
+  // Two independent entry points: mouse/touch button and keyboard form submit.
+  // The button is deliberately type="button" so a missing script can never POST to Vercel.
+  form.addEventListener('submit', handleSubmission, { capture: true });
+  submitButton?.addEventListener('click', handleSubmission);
 
   newButton?.addEventListener('click', () => {
     success?.classList.remove('is-visible');
