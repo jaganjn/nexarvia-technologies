@@ -1,0 +1,31 @@
+NEXARVIA FORM ISOLATION REPORT — V39
+
+1. NEXARVIA LEARNING APPLICATION
+- Page: learning.html
+- Form ID: internshipForm
+- Firebase path: submittedApplications/{applicationId}
+- Existing Google Sheet endpoint preserved exactly as previously configured.
+- Referral, visitor tracking, referral joins and application admin functions remain unchanged.
+- technology-inquiry.js is NOT loaded on learning.html.
+
+2. NEXARVIA TECHNOLOGY SERVICES ENQUIRY
+- Page: technology-services.html
+- Form ID: technologyInquiryForm
+- Script: technology-inquiry.js
+- Firebase path: technologyServiceInquiries/{reference}
+- Google Sheet endpoint: site-config.js > technologyInquirySheetEndpoint
+- The script now has a strict data-division-page="technology" guard.
+- It cannot attach to internshipForm.
+
+3. SHARED FIREBASE INITIALISATION
+- firebase.js initialises one Firebase app and exposes the same database instance as both db and window.db.
+- This fixes the Technology Services connection while preserving the existing db variable used by Learning.
+
+4. DATABASE RULES
+- submittedApplications and technologyServiceInquiries have separate rule blocks.
+- Publishing the included rules does not merge the two datasets.
+
+5. ADMIN DASHBOARD
+- Learning applications are read from submittedApplications.
+- Business enquiries are read from technologyServiceInquiries.
+- The two lists and exports remain separate.

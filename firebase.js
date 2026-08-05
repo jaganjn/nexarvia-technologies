@@ -13,6 +13,8 @@ if (!firebase.apps.length) {
 }
 
 const db = firebase.database();
+window.db = db;
+window.nexarviaFirebaseReady = true;
 
 // Authentication SDK is loaded only on login.html and admin.html.
 // Keeping this conditional prevents an error on the public landing page.

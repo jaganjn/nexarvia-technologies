@@ -1,8 +1,10 @@
 (() => {
   'use strict';
 
+  // Technology Services only: this script never attaches to the Learning application form.
+  if (document.body?.dataset?.divisionPage !== 'technology') return;
   const form = document.getElementById('technologyInquiryForm');
-  if (!form) return;
+  if (!form || form.id === 'internshipForm') return;
 
   const submitButton = document.getElementById('technologyInquirySubmit');
   const message = document.getElementById('technologyInquiryMessage');
@@ -12,7 +14,7 @@
   const sheetStatus = document.getElementById('technologyInquirySheetStatus');
   const newButton = document.getElementById('newTechnologyInquiry');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const cooldownKey = 'nexarviaTechnologyInquiryLastSubmitV36';
+  const cooldownKey = 'nexarviaTechnologyInquiryLastSubmitV38';
   let submitting = false;
 
   const showMessage = (text, type = 'error') => {
@@ -91,8 +93,9 @@
       return;
     }
 
-    if (!window.firebase || !window.db) {
-      showMessage('The enquiry service did not load. Refresh once and check your internet connection.');
+    const database = window.db || (window.firebase && typeof window.firebase.database === 'function' ? window.firebase.database() : null);
+    if (!window.firebase || !database) {
+      showMessage('The enquiry service could not connect. Refresh once, disable any script-blocking extension, and try again.');
       return;
     }
 
@@ -130,7 +133,7 @@
     showMessage('Securely sending your enquiry…', 'info');
 
     try {
-      await db.ref(`technologyServiceInquiries/${reference}`).set(payload);
+      await database.ref(`technologyServiceInquiries/${reference}`).set(payload);
 
       let sheetMessage = 'Your enquiry has been recorded for review.';
       try {
