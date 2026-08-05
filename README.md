@@ -1,3 +1,7 @@
+# Nexarvia Technologies V19
+
+Premium corporate website for Nexarvia Learning and Nexarvia Technology Services, with the existing Firebase application, referral, admin and login systems preserved. Technology Services are clearly marked as under development.
+
 # Nexarvia Technologies Final Production Landing Page
 
 This is the clean deployment package for the Nexarvia Technologies 2026 internship landing page.
