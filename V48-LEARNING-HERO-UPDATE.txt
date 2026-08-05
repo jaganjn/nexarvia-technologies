@@ -1,0 +1,2 @@
+V48 Learning hero rebuilt to match the approved wide premium template.
+Learning application, Firebase, referrals and Google Sheets logic were not modified.
