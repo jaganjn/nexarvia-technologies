@@ -1,1 +1,0 @@
-V44: Enquiry confirmation now appears as soon as Firebase or Google Sheets accepts the request. The second destination continues syncing in the background. Learning application files were not modified.

@@ -1,8 +1,0 @@
-V42 inquiry reliability update
-
-- Technology enquiry controller embedded directly in technology-services.html.
-- No dependency on technology-inquiry.js being uploaded or cached correctly.
-- Native page POST remains disabled.
-- Firebase and Google Sheets are attempted independently.
-- Submission succeeds if either destination accepts the enquiry.
-- Learning application files and workflow are unchanged.

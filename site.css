@@ -371,3 +371,6 @@ body.nx-learning-page{background:#f4f7fc!important}.nx-learning-page>.v22-motion
 @media(prefers-reduced-motion:reduce){
   .nx24-branch-visual::after,.nx24-parent-node::after{animation:none!important}
 }
+
+/* V50 universal authenticated admin entry */
+.nx-footer-bottom .nx-admin-footer-link{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border:1px solid rgba(111,210,255,.32);border-radius:999px;color:#cceeff;text-decoration:none;font-weight:800;letter-spacing:.05em;background:rgba(21,75,122,.28);transition:transform .25s ease,border-color .25s ease,background .25s ease,color .25s ease}.nx-footer-bottom .nx-admin-footer-link:before{content:"▣";font-size:11px;color:#6fd2ff}.nx-footer-bottom .nx-admin-footer-link:hover{transform:translateY(-2px);border-color:#6fd2ff;background:rgba(38,132,203,.3);color:#fff}@media(max-width:640px){.nx-footer-bottom .nx-admin-footer-link{margin:8px auto;justify-content:center;width:max-content}}

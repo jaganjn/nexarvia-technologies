@@ -1,6 +1,0 @@
-V47 PROGRAMME SECTION REBUILD
-
-- Replaced the previous Career Development Paths HTML structure.
-- Added a standalone v47.css stylesheet linked with cache version ?v=47.
-- Removed the unused v46.css file from the package.
-- Preserved learning form, Firebase, referrals and Google Sheets logic.
