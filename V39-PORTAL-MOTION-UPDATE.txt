@@ -1,0 +1,13 @@
+NEXARVIA V39 — PORTAL ACCESS & PREMIUM MOTION UPDATE
+
+Changes:
+- Student Login and Admin Portal links added to Home, Learning and Technology Services.
+- Portal Access cards added to every mobile navigation drawer.
+- Portal Access links added to all public-page footers.
+- New student-login.html page added with honest LMS Under Deployment status.
+- Admin login includes a Student Login switch link.
+- Admin footer includes Student Login and Technology Services links.
+- Shared motion.css and motion.js provide scroll reveals, staggered cards, controlled glow, button shimmer and reduced-motion support.
+- Existing desktop, laptop and PC layout dimensions are unchanged.
+
+Student LMS authentication is not enabled yet. The Student Login page is a deployment-status entry page until learner accounts and Firebase authentication are configured.

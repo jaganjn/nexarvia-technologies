@@ -1,0 +1,35 @@
+/* Nexarvia V39 — unified premium motion system. No layout dimensions are changed. */
+html.nx-motion-ready [data-nx-motion]{opacity:0;transform:translate3d(0,24px,0);transition:opacity .72s cubic-bezier(.2,.75,.25,1),transform .72s cubic-bezier(.2,.75,.25,1);transition-delay:var(--nx-motion-delay,0ms)}
+html.nx-motion-ready [data-nx-motion="left"]{transform:translate3d(-28px,0,0)}
+html.nx-motion-ready [data-nx-motion="right"]{transform:translate3d(28px,0,0)}
+html.nx-motion-ready [data-nx-motion="scale"]{transform:scale(.965)}
+html.nx-motion-ready [data-nx-motion].is-nx-visible{opacity:1;transform:none}
+
+.nx-motion-card{position:relative;isolation:isolate;transition:transform .28s cubic-bezier(.2,.75,.25,1),box-shadow .28s ease,border-color .28s ease!important}
+.nx-motion-card::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;background:radial-gradient(300px circle at var(--nx-mx,50%) var(--nx-my,50%),rgba(37,183,255,.12),transparent 58%);opacity:0;transition:opacity .28s ease}
+.nx-motion-card:hover::after{opacity:1}
+@media(hover:hover) and (pointer:fine){.nx-motion-card:hover{transform:translateY(-5px);box-shadow:0 22px 50px rgba(8,35,68,.13)!important}}
+
+.nx-premium-action{position:relative;overflow:hidden;isolation:isolate}
+.nx-premium-action::after{content:"";position:absolute;top:-40%;bottom:-40%;left:-55%;width:34%;transform:skewX(-22deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent);animation:nxButtonSweep 6.5s ease-in-out infinite;pointer-events:none}
+@keyframes nxButtonSweep{0%,68%{left:-55%;opacity:0}72%{opacity:1}88%{left:125%;opacity:0}100%{left:125%;opacity:0}}
+
+.nx-motion-heading{transition:text-shadow .55s ease}
+.nx-motion-heading.is-nx-visible{ text-shadow:0 10px 34px rgba(23,105,232,.08)}
+
+.nx-motion-pulse{animation:nxSoftPulse 3.8s ease-in-out infinite}
+@keyframes nxSoftPulse{0%,100%{filter:drop-shadow(0 0 0 rgba(37,183,255,0))}50%{filter:drop-shadow(0 0 12px rgba(37,183,255,.34))}}
+
+.nx-motion-line{position:relative;overflow:hidden}
+.nx-motion-line::before{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,#1769e8,#25b7ff,#7547f5);transition:transform .9s cubic-bezier(.2,.75,.25,1)}
+.nx-motion-line.is-nx-visible::before{transform:scaleX(1)}
+
+@media(max-width:767px){
+  html.nx-motion-ready [data-nx-motion]{transform:translate3d(0,16px,0);transition-duration:.58s}
+  html.nx-motion-ready [data-nx-motion="left"],html.nx-motion-ready [data-nx-motion="right"]{transform:translate3d(0,16px,0)}
+  .nx-premium-action::after{animation-duration:8s}
+}
+@media(prefers-reduced-motion:reduce){
+  html.nx-motion-ready [data-nx-motion]{opacity:1!important;transform:none!important;transition:none!important}
+  .nx-motion-card,.nx-motion-heading{transition:none!important}.nx-motion-card:hover{transform:none!important}.nx-premium-action::after,.nx-motion-pulse{animation:none!important}
+}
