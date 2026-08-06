@@ -1,6 +1,7 @@
 
-const ACTIVE_MS = 75_000;
+const ACTIVE_MS = 45_000;
 const ABANDON_MS = 150_000;
+const ZERO_PROGRESS_RETAIN_MS = 10 * 60 * 1000;
 const RETAIN_MS = 24 * 60 * 60 * 1000;
 const ALERT_STORAGE_KEY = "nexarviaAdminAlertSettingsV17";
 const SEEN_APPLICATIONS_KEY = "nexarviaAdminSeenApplicationsV17";
@@ -128,17 +129,23 @@ function updateStamp(label = "Updated") {
 
 function sessionState(visitor = {}, now = Date.now()) {
   const status = String(visitor.status || "").toLowerCase();
-  if (status === "submitted" || visitor.presence === "completed") return "submitted";
+  const presence = String(visitor.presence || "").toLowerCase();
+  if (status === "submitted" || presence === "completed") return "submitted";
 
   const activity = asMs(visitor.lastActive) || Number(visitor.clientLastActive) || asMs(visitor.startedAt);
   const age = activity ? Math.max(0, now - activity) : Number.POSITIVE_INFINITY;
   const progress = Math.max(0, Number(visitor.formProgress || 0));
-  const disconnected = ["inactive", "disconnected"].includes(String(visitor.presence || "").toLowerCase());
   const explicitlyFilling = ["filling_form", "filling", "reviewing"].includes(status);
   const hasStartedFilling = visitor.hasStartedFilling === true || progress > 0;
+  const livePresence = ["active", "filling"].includes(presence);
 
-  if (age <= ACTIVE_MS && !disconnected) {
-    return (hasStartedFilling && explicitlyFilling) || progress > 0 ? "filling" : "active";
+  // Only an explicitly foreground/active browser session can be counted live.
+  // Background, inactive, disconnected, left and completed records remain available
+  // for recent-session analytics but never increase the live visitor counter.
+  if (age <= ACTIVE_MS && livePresence) {
+    return (hasStartedFilling && explicitlyFilling) || progress > 0 || presence === "filling"
+      ? "filling"
+      : "active";
   }
   if (hasStartedFilling || explicitlyFilling) return "abandoned";
   return "left";
@@ -233,11 +240,18 @@ async function cleanupStale({ removeAbandoned = false } = {}) {
     const progress = Number(visitor.formProgress || 0);
     const hasStartedFilling = visitor.hasStartedFilling === true || progress > 0;
 
+    const presence = String(visitor.presence || "").toLowerCase();
+    const nonLivePresence = ["background", "inactive", "disconnected", "left"].includes(presence);
+
     if (removeAbandoned && age > ABANDON_MS) {
       updates[id] = null;
       return;
     }
     if (age > RETAIN_MS) {
+      updates[id] = null;
+    } else if (!hasStartedFilling && nonLivePresence && age > ZERO_PROGRESS_RETAIN_MS) {
+      // Remove old zero-progress sessions so background tabs and interrupted visits
+      // do not accumulate indefinitely in the dashboard.
       updates[id] = null;
     } else if (age > ABANDON_MS && hasStartedFilling) {
       updates[`${id}/status`] = "abandoned";

@@ -1,0 +1,9 @@
+Nexarvia Technologies V45
+
+- Live visitors count only foreground Learning sessions.
+- Background, hidden, inactive and disconnected tabs are excluded immediately.
+- Heartbeats stop while the page is hidden and resume when visible.
+- Firebase onDisconnect is re-registered after reconnects.
+- Active-session threshold reduced to 45 seconds.
+- Old zero-progress inactive sessions are automatically removed.
+- Existing admin, application, referral and enquiry paths are preserved.

@@ -784,6 +784,9 @@ async function submitApplication() {
     await db.ref().update(updates);
     await visitorRef?.onDisconnect().cancel().catch(error => console.warn('Disconnect cleanup failed:', error));
     visitorComplete = true;
+    stopVisitorHeartbeat();
+    window.clearTimeout(visitorSyncTimer);
+    visitorConnectionRef?.off();
 
     const sheetApplication = { ...application, submittedAt: new Date().toISOString() };
     fetch(SHEET_ENDPOINT, {
@@ -810,6 +813,8 @@ sessionStorage.setItem(VISITOR_KEY, visitorId);
 let visitorRef = null;
 let visitorComplete = false;
 let visitorStartedAt = null;
+let visitorHeartbeatTimer = 0;
+let visitorConnectionRef = null;
 
 function liveFieldData() {
   const data = getFormData();
@@ -831,19 +836,28 @@ function hasLiveFormData() {
   return Object.values(liveFieldData()).some(value => value === true || String(value || '').trim());
 }
 
+function resolvedVisitorPresence(patch = {}, complete = false) {
+  if (complete) return 'completed';
+  if (patch.presence) return patch.presence;
+  if (document.visibilityState !== 'visible') return 'background';
+  return hasLiveFormData() ? 'filling' : 'active';
+}
+
 function updateVisitor(patch = {}, complete = false) {
-  if (typeof db === 'undefined') return Promise.resolve();
+  if (typeof db === 'undefined' || (visitorComplete && !complete)) return Promise.resolve();
   visitorRef ||= db.ref(`liveVisitors/${visitorId}`);
   visitorComplete = visitorComplete || complete;
+  const presence = resolvedVisitorPresence(patch, complete);
   return visitorRef.update({
     page: 'Nexarvia Technologies Application Portal',
-    presence: complete ? 'completed' : 'active',
+    presence,
     lastActive: firebase.database.ServerValue.TIMESTAMP,
     referredBy: referralVerified ? referralSource : null,
     referralVerified,
     fieldData: liveFieldData(),
     hasStartedFilling: hasLiveFormData(),
-    ...patch
+    ...patch,
+    presence
   }).catch(error => {
     console.warn('Live visitor sync failed:', error);
   });
@@ -852,7 +866,46 @@ function updateVisitor(patch = {}, complete = false) {
 function scheduleVisitorSync(patch = {}) {
   if (visitorComplete) return;
   window.clearTimeout(visitorSyncTimer);
-  visitorSyncTimer = window.setTimeout(() => updateVisitor(patch), 450);
+  visitorSyncTimer = window.setTimeout(() => {
+    if (document.visibilityState === 'visible') updateVisitor(patch);
+  }, 450);
+}
+
+function stopVisitorHeartbeat() {
+  if (!visitorHeartbeatTimer) return;
+  window.clearInterval(visitorHeartbeatTimer);
+  visitorHeartbeatTimer = 0;
+}
+
+function startVisitorHeartbeat() {
+  stopVisitorHeartbeat();
+  if (visitorComplete || document.visibilityState !== 'visible') return;
+  visitorHeartbeatTimer = window.setInterval(() => {
+    if (visitorComplete || document.visibilityState !== 'visible') {
+      stopVisitorHeartbeat();
+      return;
+    }
+    updateVisitor({
+      formProgress: calculateProgress(),
+      currentStep,
+      status: hasLiveFormData() ? 'filling_form' : 'online',
+      presence: hasLiveFormData() ? 'filling' : 'active'
+    });
+  }, 15000);
+}
+
+async function registerVisitorDisconnect() {
+  if (!visitorRef || visitorComplete) return;
+  try {
+    await visitorRef.onDisconnect().update({
+      presence: 'disconnected',
+      status: hasLiveFormData() ? 'abandoned' : 'left',
+      leftAt: firebase.database.ServerValue.TIMESTAMP,
+      lastActive: firebase.database.ServerValue.TIMESTAMP
+    });
+  } catch (error) {
+    console.warn('Visitor disconnect registration failed:', error);
+  }
 }
 
 function recordReferralEvent(type, extra = {}) {
@@ -893,7 +946,7 @@ async function initialiseVisitor() {
     await visitorRef.set({
       page: 'Nexarvia Technologies Application Portal',
       status: hasLiveFormData() ? 'filling_form' : 'online',
-      presence: 'active',
+      presence: document.visibilityState === 'visible' ? (hasLiveFormData() ? 'filling' : 'active') : 'background',
       formProgress: calculateProgress(),
       currentStep,
       currentField: hasLiveFormData() ? 'Restored application draft' : 'Viewing page',
@@ -904,11 +957,17 @@ async function initialiseVisitor() {
       referredBy: null,
       referralVerified: false
     });
-    await visitorRef.onDisconnect().update({
-      presence: 'disconnected',
-      status: 'left',
-      leftAt: firebase.database.ServerValue.TIMESTAMP,
-      lastActive: firebase.database.ServerValue.TIMESTAMP
+    await registerVisitorDisconnect();
+    visitorConnectionRef = db.ref('.info/connected');
+    visitorConnectionRef.on('value', snapshot => {
+      if (snapshot.val() !== true || visitorComplete) return;
+      registerVisitorDisconnect();
+      if (document.visibilityState === 'visible') {
+        updateVisitor({
+          presence: hasLiveFormData() ? 'filling' : 'active',
+          status: hasLiveFormData() ? 'filling_form' : 'online'
+        });
+      }
     });
     referralValidationPromise = validateReferralSource();
     await referralValidationPromise;
@@ -999,11 +1058,48 @@ clearDraftButton?.addEventListener('click', () => clearDraft(true));
 
 document.addEventListener('visibilitychange', () => {
   if (visitorComplete) return;
-  if (document.visibilityState === 'hidden') updateVisitor({ presence: 'background' });
-  else updateVisitor({ presence: 'active' });
+  if (document.visibilityState === 'hidden') {
+    stopVisitorHeartbeat();
+    window.clearTimeout(visitorSyncTimer);
+    updateVisitor({
+      presence: 'background',
+      status: hasLiveFormData() ? 'filling_form' : 'online',
+      formProgress: calculateProgress(),
+      currentStep
+    });
+  } else {
+    registerVisitorDisconnect();
+    updateVisitor({
+      presence: hasLiveFormData() ? 'filling' : 'active',
+      status: hasLiveFormData() ? 'filling_form' : 'online',
+      formProgress: calculateProgress(),
+      currentStep
+    });
+    startVisitorHeartbeat();
+  }
 });
 window.addEventListener('pagehide', () => {
-  if (!visitorComplete) updateVisitor({ presence: 'inactive', status: calculateProgress() ? 'abandoned' : 'left' });
+  stopVisitorHeartbeat();
+  window.clearTimeout(visitorSyncTimer);
+  if (!visitorComplete) {
+    updateVisitor({
+      presence: 'inactive',
+      status: calculateProgress() ? 'abandoned' : 'left',
+      formProgress: calculateProgress(),
+      currentStep
+    });
+  }
+});
+window.addEventListener('pageshow', () => {
+  if (visitorComplete || document.visibilityState !== 'visible') return;
+  registerVisitorDisconnect();
+  updateVisitor({
+    presence: hasLiveFormData() ? 'filling' : 'active',
+    status: hasLiveFormData() ? 'filling_form' : 'online',
+    formProgress: calculateProgress(),
+    currentStep
+  });
+  startVisitorHeartbeat();
 });
 
 restoreDraft();
@@ -1011,13 +1107,12 @@ showStep(1, false);
 updateStepPresentation();
 updateJourney();
 refreshStepAccess(false);
-initialiseVisitor();
-window.setInterval(() => {
-  if (!visitorComplete) updateVisitor({ formProgress: calculateProgress(), currentStep, status: hasLiveFormData() ? 'filling_form' : 'online' });
-}, 12000);
+initialiseVisitor().then(() => {
+  if (!visitorComplete && document.visibilityState === 'visible') startVisitorHeartbeat();
+});
 
 // Visible in DevTools so the deployed build can be verified without guessing.
-console.info('Nexarvia Technologies guided form build: V17 live tracking and referral analytics');
+console.info('Nexarvia Technologies guided form build: V45 foreground-only live tracking');
 
 </script><script>
 'use strict';
