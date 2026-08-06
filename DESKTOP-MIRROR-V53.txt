@@ -1,0 +1,11 @@
+NEXARVIA V53 — EXACT DESKTOP-TO-MOBILE MIRROR
+
+Implementation:
+- Every HTML page uses a fixed 1440px layout viewport.
+- Existing desktop CSS remains active on phones and tablets.
+- Mobile browsers proportionally scale the full desktop composition to fit.
+- No card stacking, hamburger breakpoint, grid reflow, or alignment changes occur.
+- Desktop/laptop layouts and all existing forms, scripts, Firebase paths, Sheets endpoints, LMS, notifications, and admin flows remain unchanged.
+
+Important usability note:
+The exact desktop replica makes text and touch controls physically smaller on phones. This is intentional for mirror mode.

@@ -1,1 +1,0 @@
-Nexarvia V31: approved premium gateway implemented; duplicate selector removed.
