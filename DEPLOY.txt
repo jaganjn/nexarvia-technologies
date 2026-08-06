@@ -1,1 +1,12 @@
-Nexarvia V31: approved premium gateway implemented; duplicate selector removed.
+NEXARVIA TECHNOLOGIES — V46 DEPLOYMENT
+
+1. Upload every file in this folder to the Vercel project. Do not upload only admin.html.
+2. After deployment, hard-refresh admin.html and learning.html or clear the site cache.
+3. The V46 bulk-delete code works with the existing path-specific database rules by deleting child records directly.
+4. For the updated authenticated referral-code management rules, deploy firebase-rules.json from a Firebase-authorised environment:
+
+   firebase use mnc-internship-live
+   firebase deploy --only database
+
+Firebase project: mnc-internship-live
+Realtime Database rules file: firebase-rules.json

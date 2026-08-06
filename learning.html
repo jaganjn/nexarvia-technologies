@@ -749,6 +749,9 @@ async function submitApplication() {
       page: 'Nexarvia Technologies Application Portal',
       status: 'submitted',
       presence: 'completed',
+      trackerVersion: LIVE_TRACKER_VERSION,
+      pageVisible: false,
+      windowFocused: false,
       formProgress: 100,
       currentStep: 3,
       currentField: 'Application submitted',
@@ -815,6 +818,19 @@ let visitorComplete = false;
 let visitorStartedAt = null;
 let visitorHeartbeatTimer = 0;
 let visitorConnectionRef = null;
+const LIVE_TRACKER_VERSION = 46;
+const ADMIN_BROWSER_UNTIL_KEY = 'nexarviaAdminBrowserUntilV46';
+
+function isAdminBrowserSession() {
+  try { return Number(localStorage.getItem(ADMIN_BROWSER_UNTIL_KEY) || 0) > Date.now(); }
+  catch { return false; }
+}
+
+function isTrackableForeground() {
+  return !isAdminBrowserSession()
+    && document.visibilityState === 'visible'
+    && document.hasFocus();
+}
 
 function liveFieldData() {
   const data = getFormData();
@@ -839,26 +855,36 @@ function hasLiveFormData() {
 function resolvedVisitorPresence(patch = {}, complete = false) {
   if (complete) return 'completed';
   if (patch.presence) return patch.presence;
-  if (document.visibilityState !== 'visible') return 'background';
+  if (!isTrackableForeground()) return 'background';
   return hasLiveFormData() ? 'filling' : 'active';
 }
 
 function updateVisitor(patch = {}, complete = false) {
-  if (typeof db === 'undefined' || (visitorComplete && !complete)) return Promise.resolve();
+  if (typeof db === 'undefined' || isAdminBrowserSession() || (visitorComplete && !complete)) return Promise.resolve();
   visitorRef ||= db.ref(`liveVisitors/${visitorId}`);
   visitorComplete = visitorComplete || complete;
+  const pageVisible = document.visibilityState === 'visible';
+  const windowFocused = document.hasFocus();
   const presence = resolvedVisitorPresence(patch, complete);
-  return visitorRef.update({
+  const payload = {
     page: 'Nexarvia Technologies Application Portal',
+    trackerVersion: LIVE_TRACKER_VERSION,
+    pageVisible,
+    windowFocused,
     presence,
     lastActive: firebase.database.ServerValue.TIMESTAMP,
+    clientHeartbeatAt: Date.now(),
     referredBy: referralVerified ? referralSource : null,
     referralVerified,
     fieldData: liveFieldData(),
     hasStartedFilling: hasLiveFormData(),
     ...patch,
     presence
-  }).catch(error => {
+  };
+  if (pageVisible && windowFocused && ['active', 'filling'].includes(presence)) {
+    payload.heartbeatAt = firebase.database.ServerValue.TIMESTAMP;
+  }
+  return visitorRef.update(payload).catch(error => {
     console.warn('Live visitor sync failed:', error);
   });
 }
@@ -879,9 +905,9 @@ function stopVisitorHeartbeat() {
 
 function startVisitorHeartbeat() {
   stopVisitorHeartbeat();
-  if (visitorComplete || document.visibilityState !== 'visible') return;
-  visitorHeartbeatTimer = window.setInterval(() => {
-    if (visitorComplete || document.visibilityState !== 'visible') {
+  if (visitorComplete || !isTrackableForeground()) return;
+  const sendHeartbeat = () => {
+    if (visitorComplete || !isTrackableForeground()) {
       stopVisitorHeartbeat();
       return;
     }
@@ -889,15 +915,22 @@ function startVisitorHeartbeat() {
       formProgress: calculateProgress(),
       currentStep,
       status: hasLiveFormData() ? 'filling_form' : 'online',
-      presence: hasLiveFormData() ? 'filling' : 'active'
+      presence: hasLiveFormData() ? 'filling' : 'active',
+      pageVisible: true,
+      windowFocused: true
     });
-  }, 15000);
+  };
+  sendHeartbeat();
+  visitorHeartbeatTimer = window.setInterval(sendHeartbeat, 8_000);
 }
 
 async function registerVisitorDisconnect() {
   if (!visitorRef || visitorComplete) return;
   try {
     await visitorRef.onDisconnect().update({
+      trackerVersion: LIVE_TRACKER_VERSION,
+      pageVisible: false,
+      windowFocused: false,
       presence: 'disconnected',
       status: hasLiveFormData() ? 'abandoned' : 'left',
       leftAt: firebase.database.ServerValue.TIMESTAMP,
@@ -939,14 +972,17 @@ async function validateReferralSource() {
 }
 
 async function initialiseVisitor() {
-  if (typeof db === 'undefined') return;
+  if (typeof db === 'undefined' || isAdminBrowserSession()) return;
   visitorRef = db.ref(`liveVisitors/${visitorId}`);
   visitorStartedAt = firebase.database.ServerValue.TIMESTAMP;
   try {
     await visitorRef.set({
       page: 'Nexarvia Technologies Application Portal',
+      trackerVersion: LIVE_TRACKER_VERSION,
       status: hasLiveFormData() ? 'filling_form' : 'online',
-      presence: document.visibilityState === 'visible' ? (hasLiveFormData() ? 'filling' : 'active') : 'background',
+      presence: 'initialising',
+      pageVisible: document.visibilityState === 'visible',
+      windowFocused: document.hasFocus(),
       formProgress: calculateProgress(),
       currentStep,
       currentField: hasLiveFormData() ? 'Restored application draft' : 'Viewing page',
@@ -954,6 +990,7 @@ async function initialiseVisitor() {
       fieldData: liveFieldData(),
       startedAt: visitorStartedAt,
       lastActive: firebase.database.ServerValue.TIMESTAMP,
+      clientHeartbeatAt: Date.now(),
       referredBy: null,
       referralVerified: false
     });
@@ -962,7 +999,7 @@ async function initialiseVisitor() {
     visitorConnectionRef.on('value', snapshot => {
       if (snapshot.val() !== true || visitorComplete) return;
       registerVisitorDisconnect();
-      if (document.visibilityState === 'visible') {
+      if (isTrackableForeground()) {
         updateVisitor({
           presence: hasLiveFormData() ? 'filling' : 'active',
           status: hasLiveFormData() ? 'filling_form' : 'online'
@@ -1063,6 +1100,8 @@ document.addEventListener('visibilitychange', () => {
     window.clearTimeout(visitorSyncTimer);
     updateVisitor({
       presence: 'background',
+      pageVisible: false,
+      windowFocused: false,
       status: hasLiveFormData() ? 'filling_form' : 'online',
       formProgress: calculateProgress(),
       currentStep
@@ -1071,6 +1110,8 @@ document.addEventListener('visibilitychange', () => {
     registerVisitorDisconnect();
     updateVisitor({
       presence: hasLiveFormData() ? 'filling' : 'active',
+      pageVisible: true,
+      windowFocused: document.hasFocus(),
       status: hasLiveFormData() ? 'filling_form' : 'online',
       formProgress: calculateProgress(),
       currentStep
@@ -1084,6 +1125,8 @@ window.addEventListener('pagehide', () => {
   if (!visitorComplete) {
     updateVisitor({
       presence: 'inactive',
+      pageVisible: false,
+      windowFocused: false,
       status: calculateProgress() ? 'abandoned' : 'left',
       formProgress: calculateProgress(),
       currentStep
@@ -1091,14 +1134,35 @@ window.addEventListener('pagehide', () => {
   }
 });
 window.addEventListener('pageshow', () => {
-  if (visitorComplete || document.visibilityState !== 'visible') return;
+  if (visitorComplete || !isTrackableForeground()) return;
   registerVisitorDisconnect();
   updateVisitor({
     presence: hasLiveFormData() ? 'filling' : 'active',
+    pageVisible: true,
+    windowFocused: true,
     status: hasLiveFormData() ? 'filling_form' : 'online',
     formProgress: calculateProgress(),
     currentStep
   });
+  startVisitorHeartbeat();
+});
+
+window.addEventListener('blur', () => {
+  if (visitorComplete || isAdminBrowserSession()) return;
+  stopVisitorHeartbeat();
+  updateVisitor({
+    presence: 'background',
+    pageVisible: document.visibilityState === 'visible',
+    windowFocused: false,
+    status: hasLiveFormData() ? 'filling_form' : 'online',
+    formProgress: calculateProgress(),
+    currentStep
+  });
+});
+
+window.addEventListener('focus', () => {
+  if (visitorComplete || !isTrackableForeground()) return;
+  registerVisitorDisconnect();
   startVisitorHeartbeat();
 });
 
@@ -1108,11 +1172,13 @@ updateStepPresentation();
 updateJourney();
 refreshStepAccess(false);
 initialiseVisitor().then(() => {
-  if (!visitorComplete && document.visibilityState === 'visible') startVisitorHeartbeat();
+  if (!visitorComplete && isTrackableForeground()) {
+    window.setTimeout(() => startVisitorHeartbeat(), 1200);
+  }
 });
 
 // Visible in DevTools so the deployed build can be verified without guessing.
-console.info('Nexarvia Technologies guided form build: V45 foreground-only live tracking');
+console.info('Nexarvia Technologies guided form build: V46 verified foreground lease tracking');
 
 </script><script>
 'use strict';

@@ -2,22 +2,18 @@
   "use strict";
 
   const phrase = "DELETE ALL DATA";
-  const allDataSpecs = [
+  const standardSpecs = [
     { path: "liveVisitors", depth: 1 },
     { path: "submittedApplications", depth: 1 },
     { path: "referrals", depth: 1 },
-    { path: "referralCodes", depth: 1 },
     { path: "referralJoins", depth: 2 },
     { path: "referralEvents", depth: 2 },
     { path: "referralShares", depth: 2 },
     { path: "technologyServiceInquiries", depth: 1 },
     { path: "publicAnnouncements", depth: 1 }
   ];
-
-  let dialog;
-  let input;
-  let confirmButton;
-  let status;
+  const referralPaths = new Set(["referrals", "referralJoins", "referralEvents", "referralShares"]);
+  let dialog, input, confirmButton, status;
 
   function ensureAdminServices() {
     if (typeof auth === "undefined" || !auth?.currentUser) throw new Error("Administrator authentication is required.");
@@ -33,31 +29,55 @@
     snapshot.forEach(child => collectDeleteUpdates(child, basePath, depth - 1, [...parts, child.key], updates));
   }
 
-  async function buildDeleteUpdates(specs) {
+  function collectReferralCodes(snapshot, path, codes) {
+    if (!snapshot.exists()) return;
+    if (referralPaths.has(path)) snapshot.forEach(child => codes.add(child.key));
+    if (path === "submittedApplications") {
+      snapshot.forEach(child => {
+        const value = child.val() || {};
+        if (value.referralCode) codes.add(String(value.referralCode));
+        if (value.referredBy) codes.add(String(value.referredBy));
+      });
+    }
+  }
+
+  async function buildDeleteUpdates(specs, includeReferralCodes = false) {
     ensureAdminServices();
     const updates = {};
+    const codes = new Set();
     await Promise.all(specs.map(async spec => {
       const snapshot = await db.ref(spec.path).once("value");
       collectDeleteUpdates(snapshot, spec.path, spec.depth, [], updates);
+      collectReferralCodes(snapshot, spec.path, codes);
     }));
+    if (includeReferralCodes) {
+      codes.forEach(code => { if (code) updates[`referralCodes/${code}`] = null; });
+    }
     return updates;
   }
 
-  async function removeData(specs) {
-    const updates = await buildDeleteUpdates(specs);
-    const count = Object.keys(updates).length;
-    if (count) await db.ref().update(updates);
-    return count;
+  async function commitInBatches(updates) {
+    const entries = Object.entries(updates);
+    const batchSize = 350;
+    for (let index = 0; index < entries.length; index += batchSize) {
+      await db.ref().update(Object.fromEntries(entries.slice(index, index + batchSize)));
+    }
+    return entries.length;
+  }
+
+  async function removeData(specs, includeReferralCodes = false) {
+    const updates = await buildDeleteUpdates(specs, includeReferralCodes);
+    return Object.keys(updates).length ? commitInBatches(updates) : 0;
   }
 
   function notify(title, message, type = "success") {
     if (typeof window.showToast === "function") window.showToast(title, message, type);
   }
 
-  async function clearWithConfirmation(specs, promptText, successText) {
+  async function clearWithConfirmation(specs, promptText, successText, includeReferralCodes = false) {
     if (!window.confirm(promptText)) return;
     try {
-      const count = await removeData(specs);
+      const count = await removeData(specs, includeReferralCodes);
       notify(count ? "Data deleted" : "Nothing to delete", count ? successText : "No matching records were found.", count ? "success" : "info");
     } catch (error) {
       console.error("Admin data deletion failed:", error);
@@ -98,7 +118,6 @@
     input = dialog.querySelector("#adminDataConfirmInput");
     confirmButton = dialog.querySelector("#adminDataConfirm");
     status = dialog.querySelector("#adminDataDialogStatus");
-
     input.addEventListener("input", () => {
       confirmButton.disabled = input.value.trim().toUpperCase() !== phrase;
       status.textContent = "";
@@ -130,17 +149,13 @@
 
   async function clearAllData() {
     if (input.value.trim().toUpperCase() !== phrase) return;
-
     confirmButton.disabled = true;
     confirmButton.dataset.busy = "true";
     confirmButton.textContent = "Deleting…";
     status.textContent = "Removing current dashboard records from Firebase…";
-
     try {
-      const count = await removeData(allDataSpecs);
-      status.textContent = count
-        ? `Deleted ${count} current record${count === 1 ? "" : "s"} successfully.`
-        : "There were no current records to delete.";
+      const count = await removeData(standardSpecs, true);
+      status.textContent = count ? `Deleted ${count} current record${count === 1 ? "" : "s"} successfully.` : "There were no current records to delete.";
       notify(count ? "Dashboard data cleared" : "Dashboard already clear", count
         ? "Applications, enquiries, tracking, referrals and announcements were removed."
         : "No current dashboard records were found.", count ? "success" : "info");
@@ -151,7 +166,8 @@
       }, 900);
     } catch (error) {
       console.error("Clear all dashboard data failed:", error);
-      status.textContent = error?.message || "The data could not be deleted. Check Firebase rules and try again.";
+      const path = error?.path ? ` at ${error.path}` : "";
+      status.textContent = `${error?.code || "delete_failed"}${path}: ${error?.message || "The data could not be deleted."}`;
       confirmButton.dataset.busy = "false";
       confirmButton.disabled = false;
       confirmButton.textContent = "Try Delete Again";
@@ -162,28 +178,22 @@
     createDialog();
     document.getElementById("clearAllDashboardDataButton")?.addEventListener("click", openDialog);
     window.addEventListener("nexarvia:open-clear-data", openDialog);
-
-    // Override the older parent-level remove actions. These delete permitted child records,
-    // so they continue to work with the included path-specific Firebase rules.
     window.deleteLiveVisitors = () => clearWithConfirmation(
       [{ path: "liveVisitors", depth: 1 }],
-      "Delete all live tracking data?",
-      "All live visitor sessions were removed."
+      "Delete all live tracking data?", "All live visitor sessions were removed."
     );
     window.deleteApplications = () => clearWithConfirmation(
       [{ path: "submittedApplications", depth: 1 }],
-      "Delete all submitted applications?",
-      "All submitted applications were removed."
+      "Delete all submitted applications?", "All submitted applications were removed."
     );
     window.deleteTechnologyInquiries = () => clearWithConfirmation(
       [{ path: "technologyServiceInquiries", depth: 1 }],
-      "Delete all Technology Services enquiries?",
-      "All Technology Services enquiries were removed."
+      "Delete all Technology Services enquiries?", "All Technology Services enquiries were removed."
     );
+    const referralSpecs = standardSpecs.filter(spec => referralPaths.has(spec.path));
     window.deleteReferralData = () => clearWithConfirmation(
-      allDataSpecs.filter(spec => spec.path.startsWith("referral")),
-      "Delete all referral data?",
-      "All referral codes, joins, events and shares were removed."
+      referralSpecs,
+      "Delete all referral data?", "All referral codes, joins, events and shares were removed.", true
     );
     window.resetDashboard = openDialog;
   }

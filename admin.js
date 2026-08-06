@@ -1,5 +1,7 @@
 
-const ACTIVE_MS = 45_000;
+const ACTIVE_MS = 24_000;
+const LIVE_TRACKER_VERSION = 46;
+const ADMIN_BROWSER_UNTIL_KEY = "nexarviaAdminBrowserUntilV46";
 const ABANDON_MS = 150_000;
 const ZERO_PROGRESS_RETAIN_MS = 10 * 60 * 1000;
 const RETAIN_MS = 24 * 60 * 60 * 1000;
@@ -132,17 +134,21 @@ function sessionState(visitor = {}, now = Date.now()) {
   const presence = String(visitor.presence || "").toLowerCase();
   if (status === "submitted" || presence === "completed") return "submitted";
 
-  const activity = asMs(visitor.lastActive) || Number(visitor.clientLastActive) || asMs(visitor.startedAt);
+  // V46 uses a short, versioned foreground lease. Legacy records and records
+  // without a verified heartbeat are never allowed to inflate the live counter.
+  const trackerVersion = Number(visitor.trackerVersion || 0);
+  const activity = asMs(visitor.heartbeatAt) || Number(visitor.clientHeartbeatAt) || 0;
   const age = activity ? Math.max(0, now - activity) : Number.POSITIVE_INFINITY;
   const progress = Math.max(0, Number(visitor.formProgress || 0));
   const explicitlyFilling = ["filling_form", "filling", "reviewing"].includes(status);
   const hasStartedFilling = visitor.hasStartedFilling === true || progress > 0;
-  const livePresence = ["active", "filling"].includes(presence);
+  const verifiedForeground = trackerVersion >= LIVE_TRACKER_VERSION
+    && visitor.pageVisible === true
+    && visitor.windowFocused === true
+    && ["active", "filling"].includes(presence)
+    && age <= ACTIVE_MS;
 
-  // Only an explicitly foreground/active browser session can be counted live.
-  // Background, inactive, disconnected, left and completed records remain available
-  // for recent-session analytics but never increase the live visitor counter.
-  if (age <= ACTIVE_MS && livePresence) {
+  if (verifiedForeground) {
     return (hasStartedFilling && explicitlyFilling) || progress > 0 || presence === "filling"
       ? "filling"
       : "active";
@@ -232,7 +238,7 @@ async function cleanupStale({ removeAbandoned = false } = {}) {
   const updates = {};
 
   Object.entries(visitors).forEach(([id, visitor]) => {
-    const age = now - asMs(visitor.lastActive || visitor.clientLastActive || visitor.submittedAt);
+    const age = now - (asMs(visitor.heartbeatAt) || Number(visitor.clientHeartbeatAt) || asMs(visitor.lastActive || visitor.submittedAt));
     if (visitor.status === "submitted") {
       if (age > RETAIN_MS) updates[id] = null;
       return;
@@ -241,7 +247,13 @@ async function cleanupStale({ removeAbandoned = false } = {}) {
     const hasStartedFilling = visitor.hasStartedFilling === true || progress > 0;
 
     const presence = String(visitor.presence || "").toLowerCase();
-    const nonLivePresence = ["background", "inactive", "disconnected", "left"].includes(presence);
+    const nonLivePresence = ["background", "inactive", "disconnected", "left", "initialising"].includes(presence);
+    const legacyTracker = Number(visitor.trackerVersion || 0) < LIVE_TRACKER_VERSION;
+
+    if (legacyTracker && !hasStartedFilling && age > ACTIVE_MS) {
+      updates[id] = null;
+      return;
+    }
 
     if (removeAbandoned && age > ABANDON_MS) {
       updates[id] = null;
@@ -942,6 +954,14 @@ function setAdminAuthGate(state, title, message) {
   gate.hidden = state === "ready";
 }
 
+function markAdminBrowserActive() {
+  try {
+    localStorage.setItem(ADMIN_BROWSER_UNTIL_KEY, String(Date.now() + 30 * 60 * 1000));
+  } catch (error) {
+    console.warn("Unable to mark administrator browser:", error);
+  }
+}
+
 function initialiseAdminAccess() {
   const retry = document.getElementById("adminAuthRetry");
   retry?.addEventListener("click", () => location.reload());
@@ -971,6 +991,8 @@ function initialiseAdminAccess() {
       return;
     }
     try {
+      markAdminBrowserActive();
+      window.setInterval(markAdminBrowserActive, 60_000);
       setupUI();
       listeners();
       setAdminAuthGate("ready", "Access verified", "Dashboard ready.");
@@ -998,6 +1020,7 @@ document.readyState === "loading"
   : initialiseAdminAccess();
 
 function logout() {
+  try { localStorage.removeItem(ADMIN_BROWSER_UNTIL_KEY); } catch {}
   auth.signOut().then(() => location.replace("login.html"));
 }
 

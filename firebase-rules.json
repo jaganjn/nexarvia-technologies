@@ -24,8 +24,8 @@
       }
     },
     "referralCodes": {
-      ".read": false,
-      ".write": false,
+      ".read": "auth != null",
+      ".write": "auth != null",
       "$referralCode": {
         ".read": true,
         ".write": "auth != null || !data.exists()",

@@ -90,6 +90,7 @@
     window.clearTimeout(initTimer);
     authReady = true;
     if (user) {
+      try { localStorage.setItem("nexarviaAdminBrowserUntilV46", String(Date.now() + 30 * 60 * 1000)); } catch {}
       setStatus("Administrator session found", "ready");
       window.location.replace("admin.html");
       return;
