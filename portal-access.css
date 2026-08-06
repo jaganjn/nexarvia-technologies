@@ -27,7 +27,7 @@
 .nx-drawer-portal-copy small{color:#b9cce4;font-size:10px}
 
 .nx-footer-grid.nx-footer-grid--portals{grid-template-columns:minmax(260px,1.3fr) repeat(4,minmax(125px,.72fr));gap:38px}
-.nx-footer-portals a:first-child::after{content:"LMS";margin-left:7px;padding:2px 5px;border-radius:6px;background:rgba(37,183,255,.14);color:#79d7ff;font-size:7px;font-weight:800;letter-spacing:.08em}
+.nx-footer-portals a[href="student-login.html"]::after{content:"LMS";margin-left:7px;padding:2px 5px;border-radius:6px;background:rgba(37,183,255,.14);color:#79d7ff;font-size:7px;font-weight:800;letter-spacing:.08em}
 
 .nx-login-switch{margin-top:18px;padding-top:16px;display:flex;align-items:center;justify-content:center;gap:8px;border-top:1px solid rgba(28,66,105,.15);color:#6d7f93;font-size:12px}
 .nx-login-switch a{color:#1769e8;font-weight:800;text-decoration:none}

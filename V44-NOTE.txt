@@ -1,0 +1,1 @@
+V44 correction: LMS badge now appears only on Student Login links. Common Admin Portal links no longer display an LMS badge.
