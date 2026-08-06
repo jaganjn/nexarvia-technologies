@@ -58,7 +58,7 @@
   function makeBottomNav() {
     const current = $(".bottom-nav");
     if (!current) return null;
-    current.className = "bottom-nav admin-mobile-nav-v42";
+    current.className = "bottom-nav admin-mobile-nav-v43";
     current.setAttribute("aria-label", "Mobile admin navigation");
     current.innerHTML = [
       ["overview", "Overview"], ["applications", "Applications"], ["enquiries", "Enquiries"],
@@ -94,14 +94,16 @@
     moreSheet.innerHTML = `
       <div class="admin-more-head"><strong>More Admin Tools</strong><button type="button" data-close-more aria-label="Close more menu">×</button></div>
       <div class="admin-more-grid">
+        <a class="home-link" href="index.html"><i>⌂</i><span><b>Corporate Home</b><small>Return to Nexarvia Technologies</small></span></a>
         <button type="button" data-sheet-view="visitors"><i>◉</i><span><b>Live Visitors</b><small>Sessions and form progress</small></span></button>
         <button type="button" data-sheet-view="analytics"><i>⌁</i><span><b>Analytics</b><small>Trends, colleges and domains</small></span></button>
         <button type="button" data-sheet-view="announcements"><i>✦</i><span><b>Announcements</b><small>Publish website notices</small></span></button>
         <button type="button" data-sheet-view="settings"><i>⚙</i><span><b>Settings & Data</b><small>Alerts, health and controls</small></span></button>
-        <a href="learning.html"><i>↗</i><span><b>Learning Website</b><small>Open Nexarvia Learning</small></span></a>
+        <a href="learning.html"><i>↗</i><span><b>Nexarvia Learning</b><small>Open the Learning division</small></span></a>
         <a href="technology-services.html"><i>▦</i><span><b>Technology Services</b><small>Open services website</small></span></a>
         <a href="privacy.html"><i>◌</i><span><b>Privacy</b><small>Privacy notice</small></span></a>
         <a href="terms.html"><i>▤</i><span><b>Terms</b><small>Website terms</small></span></a>
+        <button type="button" class="danger" data-clear-all-data><i>×</i><span><b>Clear All Data</b><small>Protected permanent reset</small></span></button>
         <button type="button" class="danger" data-admin-logout><i>↪</i><span><b>Sign Out</b><small>End administrator session</small></span></button>
       </div>`;
     document.body.append(moreOverlay, moreSheet);
@@ -113,6 +115,10 @@
       if (viewButton) {
         showView(viewButton.dataset.sheetView);
         closeMore();
+      }
+      if (event.target.closest("[data-clear-all-data]")) {
+        closeMore();
+        window.dispatchEvent(new CustomEvent("nexarvia:open-clear-data"));
       }
       if (event.target.closest("[data-admin-logout]")) {
         closeMore();
@@ -181,41 +187,47 @@
     const referralSections = rangeBetween(sections, referralStart, enquiryStart);
     const enquirySections = rangeBetween(sections, enquiryStart, announcements);
 
-    sections.forEach(section => section.classList.add("v42-screen-hidden"));
-    $$(".dashboard-grid > *", main).forEach(panel => panel.classList.add("v42-panel-hidden"));
+    sections.forEach(section => section.classList.add("v43-screen-hidden"));
+    $$(".dashboard-grid > *", main).forEach(panel => panel.classList.add("v43-panel-hidden"));
 
     if (name === "overview") {
-      [hero, metrics, dashboardGrid].forEach(section => section?.classList.remove("v42-screen-hidden"));
-      [activity, colleges, visitors, domains].forEach(panel => panel?.classList.remove("v42-panel-hidden"));
+      [hero, metrics, dashboardGrid].forEach(section => section?.classList.remove("v43-screen-hidden"));
+      [activity, colleges, visitors, domains].forEach(panel => panel?.classList.remove("v43-panel-hidden"));
     } else if (name === "applications") {
-      dashboardGrid?.classList.remove("v42-screen-hidden");
-      [applications, domains].forEach(panel => panel?.classList.remove("v42-panel-hidden"));
+      dashboardGrid?.classList.remove("v43-screen-hidden");
+      [applications, domains].forEach(panel => panel?.classList.remove("v43-panel-hidden"));
     } else if (name === "visitors") {
-      dashboardGrid?.classList.remove("v42-screen-hidden");
-      visitors?.classList.remove("v42-panel-hidden");
+      dashboardGrid?.classList.remove("v43-screen-hidden");
+      visitors?.classList.remove("v43-panel-hidden");
     } else if (name === "analytics") {
-      dashboardGrid?.classList.remove("v42-screen-hidden");
-      [activity, colleges, domains].forEach(panel => panel?.classList.remove("v42-panel-hidden"));
+      dashboardGrid?.classList.remove("v43-screen-hidden");
+      [activity, colleges, domains].forEach(panel => panel?.classList.remove("v43-panel-hidden"));
     } else if (name === "enquiries") {
-      enquirySections.forEach(section => section.classList.remove("v42-screen-hidden"));
+      enquirySections.forEach(section => section.classList.remove("v43-screen-hidden"));
     } else if (name === "referrals") {
-      referralSections.forEach(section => section.classList.remove("v42-screen-hidden"));
+      referralSections.forEach(section => section.classList.remove("v43-screen-hidden"));
     } else if (name === "announcements") {
-      announcements?.classList.remove("v42-screen-hidden");
+      announcements?.classList.remove("v43-screen-hidden");
     } else if (name === "settings") {
-      settings?.classList.remove("v42-screen-hidden");
+      settings?.classList.remove("v43-screen-hidden");
     } else {
       name = "overview";
-      [hero, metrics, dashboardGrid].forEach(section => section?.classList.remove("v42-screen-hidden"));
-      [activity, colleges, visitors, domains].forEach(panel => panel?.classList.remove("v42-panel-hidden"));
+      [hero, metrics, dashboardGrid].forEach(section => section?.classList.remove("v43-screen-hidden"));
+      [activity, colleges, visitors, domains].forEach(panel => panel?.classList.remove("v43-panel-hidden"));
     }
 
     activeView = name;
     updateViewbar(name);
     updateNav(["overview", "applications", "enquiries", "referrals"].includes(name) ? name : "more");
+    const preferredHash = {
+      overview: "#dashboard", applications: "#applications", visitors: "#liveVisitors", analytics: "#activity",
+      enquiries: "#technologyInquiries", referrals: "#referralOverview", announcements: "#announcements", settings: "#settings"
+    }[name];
+    if (preferredHash && location.hash !== preferredHash) history.replaceState(null, "", preferredHash);
+    $$(".side-nav a[href^='#']").forEach(link => link.classList.toggle("active", link.getAttribute("href") === preferredHash));
     labelTables(main);
 
-    const visible = sections.filter(section => !section.classList.contains("v42-screen-hidden"));
+    const visible = sections.filter(section => !section.classList.contains("v43-screen-hidden"));
     document.dispatchEvent(new CustomEvent("nexarvia:admin-screen-change", { detail: { name, visible } }));
     if (shouldScroll) window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -236,9 +248,20 @@
     if (!nav || !main) return;
 
     mobileInitialised = true;
-    document.body.classList.add("admin-mobile-v42-ready");
+    document.body.classList.add("admin-mobile-v43-ready");
     viewbar = makeViewbar();
     makeMoreSheet();
+
+    document.addEventListener("focusin", event => {
+      if (event.target.matches("input, textarea, select, [contenteditable='true']")) document.body.classList.add("admin-field-focus");
+    });
+    document.addEventListener("focusout", event => {
+      if (!event.relatedTarget || !event.relatedTarget.matches?.("input, textarea, select, [contenteditable='true']")) {
+        window.setTimeout(() => {
+          if (!document.activeElement?.matches?.("input, textarea, select, [contenteditable='true']")) document.body.classList.remove("admin-field-focus");
+        }, 80);
+      }
+    });
 
     nav.addEventListener("click", event => {
       const button = event.target.closest("button[data-admin-view]");
@@ -270,7 +293,7 @@
     mobileInitialised = false;
     tableObserver?.disconnect();
     tableObserver = null;
-    document.body.classList.remove("admin-mobile-v42-ready");
+    document.body.classList.remove("admin-mobile-v43-ready");
     document.body.style.overflow = "";
     closeDrawer();
     closeMore();
@@ -279,10 +302,10 @@
     moreOverlay?.remove(); moreOverlay = null;
 
     const { sections } = mainSections();
-    sections.forEach(section => section.classList.remove("v42-screen-hidden"));
-    $$(".dashboard-grid > *").forEach(panel => panel.classList.remove("v42-panel-hidden"));
+    sections.forEach(section => section.classList.remove("v43-screen-hidden"));
+    $$(".dashboard-grid > *").forEach(panel => panel.classList.remove("v43-panel-hidden"));
 
-    const mobileNav = $(".bottom-nav.admin-mobile-nav-v42");
+    const mobileNav = $(".bottom-nav.admin-mobile-nav-v43");
     if (mobileNav) location.reload();
   }
 

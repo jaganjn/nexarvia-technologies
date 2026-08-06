@@ -6,8 +6,8 @@
 <title>Nexarvia Technologies — Admin Command Center</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="admin.css" rel="stylesheet"/><link href="admin-stability.css" rel="stylesheet"/><link href="admin-responsive-v42.css" rel="stylesheet"/><link href="admin-motion-v42.css" rel="stylesheet"/></head>
-<body class="admin-page admin-corporate-v15" data-admin-build="v42"><div aria-live="polite" class="admin-auth-gate" id="adminAuthGate" role="status">
+<link href="admin.css" rel="stylesheet"/><link href="admin-stability.css" rel="stylesheet"/><link href="admin-responsive-v43.css" rel="stylesheet"/><link href="admin-motion-v43.css" rel="stylesheet"/></head>
+<body class="admin-page admin-corporate-v15" data-admin-build="v43"><div aria-live="polite" class="admin-auth-gate" id="adminAuthGate" role="status">
 <div class="admin-auth-gate__card">
 <img alt="" src="nexarvia-mark.png"/>
 <span aria-hidden="true" class="admin-auth-gate__spinner"></span>
@@ -42,7 +42,7 @@
 <div class="connection" id="portalLiveStatus"><i></i><span id="portalLiveText">Connecting…</span></div>
 <button aria-pressed="false" class="sound-quick-toggle" id="soundQuickToggle" title="Enable notification sound" type="button">🔇</button>
 <div class="clock"><strong id="liveClock">--:--</strong><small id="liveDate">--</small></div>
-<a class="portal-btn" href="learning.html">Learning Portal <span>↗</span></a>
+<a class="portal-btn" href="index.html" aria-label="Return to Nexarvia Technologies home"><span class="portal-btn-icon" aria-hidden="true">⌂</span><span class="portal-btn-label">Home</span></a>
 </div>
 </header>
 <main>
@@ -98,12 +98,12 @@
 <article><i id="referralHealthDot"></i><span>Referral System</span><strong id="referralHealthText">Checking</strong></article>
 <article><i id="inquiriesHealthDot"></i><span>Service Inquiries</span><strong id="inquiriesHealthText">Checking</strong></article><article><i class="healthy"></i><span>Sound Alerts</span><strong id="soundHealthText">Disabled</strong></article>
 </div>
-<div class="settings-grid"><button onclick="deleteTechnologyInquiries()"><b>Delete Service Inquiries</b><span>Remove Technology Services enquiry records</span></button><button onclick="deleteLiveVisitors()"><b>Clear Tracking</b><span>Delete live session records</span></button><button onclick="deleteApplications()"><b>Delete Applications</b><span>Remove submitted records</span></button><button onclick="deleteReferralData()"><b>Delete Referrals</b><span>Remove referral records</span></button><button onclick="resetDashboard()"><b>Full Reset</b><span>Clear all dashboard data</span></button></div></section>
+<div class="settings-grid"><button onclick="deleteTechnologyInquiries()"><b>Delete Service Inquiries</b><span>Remove Technology Services enquiry records</span></button><button onclick="deleteLiveVisitors()"><b>Clear Tracking</b><span>Delete live session records</span></button><button onclick="deleteApplications()"><b>Delete Applications</b><span>Remove submitted records</span></button><button onclick="deleteReferralData()"><b>Delete Referrals</b><span>Remove referral records</span></button><button class="danger-reset-card" id="clearAllDashboardDataButton" type="button"><b>Clear All Current Data</b><span>Delete applications, enquiries, tracking, referrals and announcements</span></button></div></section>
 </main>
 <footer class="admin-footer">
 <div><strong>Nexarvia Technologies Administration</strong><span>Live operations secured through Firebase</span></div>
-<nav aria-label="Admin footer links"><a href="technology-services.html">Technology Services</a><a href="learning.html">Learning Website</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><button onclick="logout()" type="button">Sign Out</button></nav>
-<small>Version 7.0 Responsive Operations</small>
+<nav aria-label="Admin footer links"><a href="index.html">Home</a><a href="technology-services.html">Technology Services</a><a href="learning.html">Learning Website</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><button onclick="logout()" type="button">Sign Out</button></nav>
+<small>Version 8.0 Unified Operations</small>
 </footer>
 <nav aria-label="Mobile admin navigation" class="bottom-nav">
 <a href="#dashboard">⌂<span>Dashboard</span></a>
@@ -124,4 +124,4 @@
 <div><span class="refresh-spinner"></span><strong>Refreshing dashboard</strong><small>Cleaning abandoned sessions and loading fresh data…</small></div>
 </div>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script><script src="firebase.js"></script><script src="admin.js"></script>
-<script src="admin-responsive-v42.js"></script><script src="admin-motion-v42.js"></script></body></html>
+<script src="admin-responsive-v43.js"></script><script src="admin-data-tools-v43.js"></script><script src="admin-motion-v43.js"></script></body></html>

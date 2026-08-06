@@ -1,4 +1,4 @@
-/* Nexarvia V42 — premium admin motion without content-hiding dependencies. */
+/* Nexarvia V43 — premium admin motion without content-hiding dependencies. */
 body.admin-page {
   --admin-motion-blue: #1e75ff;
   --admin-motion-cyan: #31c8ff;
@@ -157,7 +157,7 @@ body.admin-page .sidebar.open .side-nav a:nth-of-type(10) { animation-delay: .22
   }
 }
 
-/* V42 view and More-menu motion. */
+/* V43 view and More-menu motion. */
 body.admin-page .admin-mobile-viewbar button { transition: transform .24s ease, box-shadow .24s ease; }
 body.admin-page .admin-mobile-viewbar button:active { transform: rotate(28deg) scale(.94); }
 body.admin-page .admin-more-sheet.is-open .admin-more-grid > * { animation: adminMoreItem .34s ease both; }
