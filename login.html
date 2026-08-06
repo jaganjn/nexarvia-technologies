@@ -7,12 +7,9 @@
 <meta content="Secure administrator login for the Nexarvia Technologies platform." name="description"/>
 <title>Nexarvia Technologies | Admin Login</title>
 <link href="nexarvia-icon.png" rel="icon" type="image/png"/>
-<link href="admin.css" rel="stylesheet"/><link href="v25.css" rel="stylesheet"/><link href="mobile-v38.css" rel="stylesheet"/><link href="portal-access.css" rel="stylesheet"/><link href="motion.css" rel="stylesheet"/></head>
+<link href="admin.css" rel="stylesheet"/><link href="mobile-v38.css" rel="stylesheet"/><link href="admin-stability.css" rel="stylesheet"/></head>
 <body class="crm-login-page">
-<a aria-label="Back to application page" class="back-application" href="index.html">
-<span>←</span>
-    Back to Application
-  </a>
+<a aria-label="Back to application page" class="back-application" href="index.html"><span>←</span> Corporate Home</a>
 <div class="login-background-shape shape-one"></div>
 <div class="login-background-shape shape-two"></div>
 <div class="login-background-grid"></div>
@@ -50,39 +47,32 @@
           Sign in securely to monitor applications and live form activity.
         </p>
 <div aria-label="System status" class="login-system-row">
-<span><i></i> Firebase connected</span>
+<span id="firebaseLoginStatus"><i></i> Checking Firebase…</span>
 <span>Realtime monitoring</span>
 </div>
-<div class="crm-field">
+<form id="adminLoginForm" novalidate="True"><div class="crm-field">
 <label for="username">Admin Email</label>
 <div class="crm-input-wrap">
 <span class="input-icon">✉</span>
 <input autocomplete="username" id="username" placeholder="Enter your Firebase admin email" type="text"/>
 </div>
-</div>
-<div class="crm-field">
+</div><div class="crm-field">
 <label for="password">Password</label>
 <div class="crm-input-wrap">
 <span class="input-icon">●</span>
 <input autocomplete="current-password" id="password" placeholder="Enter your password" type="password"/>
-<button aria-label="Show or hide password" class="password-toggle" onclick="
-                const input=document.getElementById('password');
-                input.type=input.type==='password'?'text':'password';
-                this.textContent=input.type==='password'?'Show':'Hide';
-              " type="button">Show</button>
+<button aria-label="Show or hide password" class="password-toggle" id="passwordToggle" type="button">Show</button>
 </div>
-</div>
-<button class="crm-login-button" id="loginButton" onclick="login()" type="button">
+</div><button class="crm-login-button" disabled="" id="loginButton" type="submit">
           Login to Dashboard
           <span>→</span>
-</button>
-<div aria-live="polite" id="error"></div>
+</button><div aria-live="polite" class="login-message" id="error"></div></form>
 <div class="crm-secure-note">
 <span>🔒</span>
           Secure administrator access
         </div>
-<a class="mobile-back-link" href="learning.html">← Back to Nexarvia Learning</a>
-<div class="nx-login-switch"><span>Looking for learner access?</span><a href="student-login.html">Student Login</a></div></div>
+<a class="mobile-back-link" href="index.html">← Back to Nexarvia Technologies</a>
+</div>
 <footer class="crm-login-footer">
 <span>© 2026 Nexarvia Technologies</span>
 <span>Secure Admin Console</span>
@@ -94,6 +84,5 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script src="firebase.js"></script>
 <script src="login.js"></script>
-<script src="admin-effects.js"></script>
-<script src="v25.js"></script><script src="mobile-v38.js"></script><script src="motion.js"></script></body>
+</body>
 </html>

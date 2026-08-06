@@ -1,0 +1,24 @@
+/* Nexarvia V40 — page-specific premium visuals for Learning and Technology Services. Content remains visible without JS. */
+.nx24-learning-page,.nx24-services-page{--nx-div-accent:#25b7ff;--nx-div-accent2:#7547f5}
+.nx24-services-page{--nx-div-accent:#6c54ff;--nx-div-accent2:#20c7ff}
+.nx-division-graphic-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.nx-division-graphic-layer span{position:absolute;border-radius:50%;opacity:.42;filter:blur(1px)}
+.nx-division-graphic-layer .orb-a{width:260px;height:260px;right:7%;top:8%;background:radial-gradient(circle,rgba(37,183,255,.32),rgba(37,183,255,0) 68%);animation:nxDivFloatA 8s ease-in-out infinite}
+.nx-division-graphic-layer .orb-b{width:190px;height:190px;left:4%;bottom:5%;background:radial-gradient(circle,rgba(117,71,245,.22),rgba(117,71,245,0) 68%);animation:nxDivFloatB 10s ease-in-out infinite}
+.nx-division-graphic-layer .route{position:absolute;left:8%;right:8%;top:50%;height:1px;border-radius:99px;background:linear-gradient(90deg,transparent,var(--nx-div-accent),var(--nx-div-accent2),transparent);opacity:.28;transform-origin:left;animation:nxDivRoute 4.8s ease-in-out infinite}
+.nx-division-graphic-layer .route::after{content:"";position:absolute;top:50%;left:0;width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 14px var(--nx-div-accent),0 0 28px var(--nx-div-accent);animation:nxDivParticle 4.8s ease-in-out infinite}
+.nx24-division-hero,.nx32-services-hero{position:relative;isolation:isolate}.nx24-division-hero>.nx-container,.nx32-services-hero>.nx-container{position:relative;z-index:1}
+.nx-div-reveal{opacity:0;transform:translateY(24px);transition:opacity .72s cubic-bezier(.2,.75,.25,1),transform .72s cubic-bezier(.2,.75,.25,1);transition-delay:var(--nx-div-delay,0ms)}
+.nx-div-reveal.is-visible{opacity:1;transform:none}
+.nx-div-card{position:relative;isolation:isolate;transition:transform .32s ease,box-shadow .32s ease,border-color .32s ease!important}
+.nx-div-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(120deg,transparent 20%,rgba(255,255,255,.22) 50%,transparent 80%);transform:translateX(-120%);opacity:.5;transition:transform .75s ease;z-index:0}
+.nx-div-card:hover::after{transform:translateX(120%)}
+@media(hover:hover) and (pointer:fine){.nx-div-card:hover{transform:translateY(-6px);box-shadow:0 24px 58px rgba(11,44,82,.16)!important}}
+.nx26-map-route article.is-spotlit,.nx32-journey-step.is-spotlit{border-color:var(--nx-div-accent)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--nx-div-accent) 35%,transparent),0 16px 36px color-mix(in srgb,var(--nx-div-accent) 18%,transparent)!important;transform:translateY(-3px)}
+.nx25-programme-icon,.nx33-service-icon,.nx27-project-icon,.nx32-step-icon{transition:transform .35s ease,filter .35s ease}.nx-div-card:hover .nx25-programme-icon,.nx-div-card:hover .nx33-service-icon,.nx-div-card:hover .nx27-project-icon,.nx32-journey-step.is-spotlit .nx32-step-icon{transform:scale(1.08) rotate(-3deg);filter:drop-shadow(0 0 10px color-mix(in srgb,var(--nx-div-accent) 45%,transparent))}
+@keyframes nxDivFloatA{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-24px,18px,0)}}
+@keyframes nxDivFloatB{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(20px,-16px,0)}}
+@keyframes nxDivRoute{0%,100%{transform:scaleX(.25);opacity:.14}50%{transform:scaleX(1);opacity:.38}}
+@keyframes nxDivParticle{0%{left:0;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:100%;opacity:0}}
+@media(max-width:767px){.nx-division-graphic-layer .orb-a{width:160px;height:160px;right:-20%;top:4%}.nx-division-graphic-layer .orb-b{width:130px;height:130px;left:-18%;bottom:8%}.nx-division-graphic-layer .route{left:4%;right:4%;top:62%}.nx-div-reveal{transform:translateY(16px);transition-duration:.55s}.nx-div-card:hover{transform:none!important}.nx32-journey-step.is-spotlit,.nx26-map-route article.is-spotlit{transform:none}}
+@media(prefers-reduced-motion:reduce){.nx-division-graphic-layer *,.nx-div-card::after{animation:none!important}.nx-div-reveal{opacity:1!important;transform:none!important;transition:none!important}.nx-div-card,.nx25-programme-icon,.nx33-service-icon,.nx27-project-icon,.nx32-step-icon{transition:none!important}}

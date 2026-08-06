@@ -6,8 +6,19 @@
 <title>Nexarvia Technologies — Admin Command Center</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="admin.css" rel="stylesheet"/><link href="v25.css" rel="stylesheet"/><link href="mobile-v38.css" rel="stylesheet"/><link href="portal-access.css" rel="stylesheet"/><link href="motion.css" rel="stylesheet"/></head>
-<body class="admin-page admin-corporate-v15">
+<link href="admin.css" rel="stylesheet"/><link href="mobile-v38.css" rel="stylesheet"/><link href="admin-stability.css" rel="stylesheet"/></head>
+<body class="admin-page admin-corporate-v15"><div aria-live="polite" class="admin-auth-gate" id="adminAuthGate" role="status">
+<div class="admin-auth-gate__card">
+<img alt="" src="nexarvia-mark.png"/>
+<span aria-hidden="true" class="admin-auth-gate__spinner"></span>
+<strong id="adminAuthGateTitle">Checking administrator session…</strong>
+<p id="adminAuthGateMessage">Please wait while Firebase Authentication verifies secure access.</p>
+<div class="admin-auth-gate__actions" hidden="" id="adminAuthGateActions">
+<button id="adminAuthRetry" type="button">Retry</button>
+<a href="login.html">Return to Login</a>
+</div>
+</div>
+</div>
 <div class="app-shell">
 <aside class="sidebar" id="sidebar">
 <a class="brand skillpath-admin-brand nexarvia-admin-brand" href="#dashboard"><img alt="Nexarvia Technologies" src="nexarvia-logo-light.png"/></a>
@@ -91,7 +102,7 @@
 </main>
 <footer class="admin-footer">
 <div><strong>Nexarvia Technologies Administration</strong><span>Live operations secured through Firebase</span></div>
-<nav aria-label="Admin footer links"><a href="student-login.html">Student Login</a><a href="technology-services.html">Technology Services</a><a href="learning.html">Learning Website</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><button onclick="logout()" type="button">Sign Out</button></nav>
+<nav aria-label="Admin footer links"><a href="technology-services.html">Technology Services</a><a href="learning.html">Learning Website</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><button onclick="logout()" type="button">Sign Out</button></nav>
 <small>Version 6.0 Corporate Mobile</small>
 </footer>
 <nav aria-label="Mobile admin navigation" class="bottom-nav">
@@ -112,5 +123,5 @@
 <div aria-hidden="true" class="refresh-overlay" id="refreshOverlay">
 <div><span class="refresh-spinner"></span><strong>Refreshing dashboard</strong><small>Cleaning abandoned sessions and loading fresh data…</small></div>
 </div>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script><script src="firebase.js"></script><script src="admin.js"></script><script src="admin-effects.js"></script>
-<script src="v25.js"></script><script src="mobile-v38.js"></script><script src="motion.js"></script></body></html>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script><script src="firebase.js"></script><script src="admin.js"></script>
+<script src="mobile-v38.js"></script></body></html>

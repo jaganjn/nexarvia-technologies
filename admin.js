@@ -1,6 +1,4 @@
 
-document.body.style.visibility = "hidden";
-
 const ACTIVE_MS = 75_000;
 const ABANDON_MS = 150_000;
 const RETAIN_MS = 24 * 60 * 60 * 1000;
@@ -917,15 +915,73 @@ function setupUI() {
   });
 }
 
-auth.onAuthStateChanged(user => {
-  if (!user) {
-    location.replace("login.html");
+function setAdminAuthGate(state, title, message) {
+  const gate = document.getElementById("adminAuthGate");
+  const titleEl = document.getElementById("adminAuthGateTitle");
+  const messageEl = document.getElementById("adminAuthGateMessage");
+  const actions = document.getElementById("adminAuthGateActions");
+  if (!gate) return;
+  gate.dataset.state = state;
+  if (titleEl) titleEl.textContent = title;
+  if (messageEl) messageEl.textContent = message;
+  if (actions) actions.hidden = state !== "error";
+  gate.hidden = state === "ready";
+}
+
+function initialiseAdminAccess() {
+  const retry = document.getElementById("adminAuthRetry");
+  retry?.addEventListener("click", () => location.reload());
+  setAdminAuthGate("checking", "Checking administrator session…", "Please wait while Firebase Authentication verifies secure access.");
+
+  if (typeof auth === "undefined" || !auth || typeof auth.onAuthStateChanged !== "function") {
+    setAdminAuthGate("error", "Authentication service unavailable", "Firebase Authentication could not be loaded. Check the Firebase scripts and deployed-domain configuration.");
     return;
   }
-  document.body.style.visibility = "visible";
-  setupUI();
-  listeners();
+  if (typeof db === "undefined" || !db) {
+    setAdminAuthGate("error", "Database service unavailable", "Firebase Realtime Database could not be initialised. Verify firebase.js and your project configuration.");
+    return;
+  }
+
+  let settled = false;
+  const timeout = window.setTimeout(() => {
+    if (settled) return;
+    setAdminAuthGate("error", "Session verification timed out", "The authentication check took too long. Check your connection, authorised domain and API-key restrictions, then retry.");
+  }, 10000);
+
+  auth.onAuthStateChanged(user => {
+    settled = true;
+    window.clearTimeout(timeout);
+    if (!user) {
+      setAdminAuthGate("checking", "Administrator login required", "Redirecting to the secure login page…");
+      window.setTimeout(() => location.replace("login.html"), 350);
+      return;
+    }
+    try {
+      setupUI();
+      listeners();
+      setAdminAuthGate("ready", "Access verified", "Dashboard ready.");
+    } catch (error) {
+      console.error("Admin dashboard initialisation failed:", error);
+      setAdminAuthGate("error", "Dashboard could not initialise", error?.message || "A dashboard script failed before the data views could load.");
+    }
+  }, error => {
+    settled = true;
+    window.clearTimeout(timeout);
+    console.error("Admin authentication error:", error);
+    setAdminAuthGate("error", "Unable to verify administrator access", error?.message || "Firebase Authentication returned an error.");
+  });
+}
+
+window.addEventListener("error", event => {
+  const gate = document.getElementById("adminAuthGate");
+  if (gate && !gate.hidden) {
+    setAdminAuthGate("error", "Dashboard script error", event.message || "A script failed while loading the dashboard.");
+  }
 });
+
+document.readyState === "loading"
+  ? document.addEventListener("DOMContentLoaded", initialiseAdminAccess, { once: true })
+  : initialiseAdminAccess();
 
 function logout() {
   auth.signOut().then(() => location.replace("login.html"));

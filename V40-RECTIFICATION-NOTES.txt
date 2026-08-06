@@ -1,0 +1,9 @@
+Nexarvia V40 — Portal Visibility, Admin Stability and Division Motion
+
+- Student Login appears only inside Nexarvia Learning and the student-login page.
+- Admin Portal remains available from Home, Learning and Technology Services.
+- Admin login and dashboard content are visible by default.
+- Admin authentication uses a visible loading/error gate instead of hiding the body.
+- Public motion scripts were removed from admin authentication pages.
+- Learning and Technology Services use a new visible-first, page-specific motion system.
+- Existing Firebase configuration, data paths, forms, referrals and enquiries are preserved.
