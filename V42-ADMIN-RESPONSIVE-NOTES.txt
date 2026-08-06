@@ -1,0 +1,10 @@
+Nexarvia Technologies V42
+
+Admin corrections:
+- Full-height flex workspace and compact desktop footer.
+- One admin responsive breakpoint at 820px.
+- Complete mobile views: Overview, Applications, Enquiries, Referrals.
+- More menu: Live Visitors, Analytics, Announcements, Settings, website links and Sign Out.
+- Dedicated mobile table-card layout and dynamic Firebase relabelling.
+- Restored premium admin motion for desktop and mobile.
+- Content remains visible without animation JavaScript.
