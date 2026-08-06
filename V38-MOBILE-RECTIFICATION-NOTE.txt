@@ -1,0 +1,14 @@
+Nexarvia V38 Mobile Rectification
+
+- Desktop/laptop/PC styles remain unchanged.
+- Mobile styles are isolated in mobile-v38.css and mobile-v38.js.
+- Standard mobile spacing, typography, colours, headers and navigation.
+- Common homepage gateway retained on mobile.
+- Reduced unnecessary horizontal carousels.
+- Programme cards remain swipeable; other processes use compact grids/timelines.
+- Learning journey autoplay remains mobile-only through v36.js.
+- Technology process uses a connected vertical layout.
+- Footer is single-column on mobile.
+- Admin dashboard uses mobile screen states rather than one continuous compressed page.
+- Tables are transformed into labelled mobile cards.
+- Tested targets: 320, 360, 375, 390, 414, 430 and 767 CSS pixels.
