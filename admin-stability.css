@@ -1,6 +1,7 @@
 /* Nexarvia V40 — authentication pages and dashboard remain visible by default. */
 html,body{visibility:visible!important}
-.crm-login-intro,.crm-login-card,.crm-login-copy,.crm-login-panel,.admin-page .panel,.admin-page .metric,.admin-page .hero{opacity:1!important;transform:none!important}
+.crm-login-intro,.crm-login-card,.crm-login-copy,.crm-login-panel{opacity:1!important;transform:none!important}
+.admin-page .panel,.admin-page .metric,.admin-page .hero{opacity:1;visibility:visible}
 .crm-login-card form{display:grid;gap:0}
 .login-message{min-height:24px;margin:10px 0 0;color:#e63d57;font-size:12px;line-height:1.45;text-align:center}
 .login-message[data-type="success"]{color:#1c8b61}

@@ -1,0 +1,158 @@
+/* Nexarvia V41 — premium admin motion without content-hiding dependencies. */
+body.admin-page {
+  --admin-motion-blue: #1e75ff;
+  --admin-motion-cyan: #31c8ff;
+  --admin-motion-violet: #7a4cff;
+}
+
+body.admin-page .hero {
+  isolation: isolate;
+}
+
+body.admin-page .hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -35% -20%;
+  background:
+    linear-gradient(115deg, transparent 38%, rgba(73, 211, 255, .13) 48%, transparent 58%),
+    radial-gradient(circle at 74% 42%, rgba(130, 75, 255, .18), transparent 28%);
+  transform: translateX(-18%);
+  animation: adminHeroSweep 8s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+body.admin-page .hero-status strong i,
+body.admin-page .connection i {
+  animation: adminLivePulse 1.8s ease-in-out infinite;
+}
+
+body.admin-page .metric-icon {
+  animation: adminIconFloat 4.4s ease-in-out infinite;
+}
+
+body.admin-page .metric:nth-child(2) .metric-icon { animation-delay: -.8s; }
+body.admin-page .metric:nth-child(3) .metric-icon { animation-delay: -1.6s; }
+body.admin-page .metric:nth-child(4) .metric-icon { animation-delay: -2.4s; }
+body.admin-page .metric:nth-child(5) .metric-icon { animation-delay: -3.2s; }
+
+body.admin-page .metric,
+body.admin-page .panel,
+body.admin-page .referral-metrics article {
+  transition: border-color .28s ease, box-shadow .32s ease, translate .32s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.admin-page .metric:hover,
+  body.admin-page .panel:hover,
+  body.admin-page .referral-metrics article:hover {
+    translate: 0 -4px;
+    border-color: rgba(37, 126, 255, .28);
+    box-shadow: 0 18px 42px rgba(10, 45, 91, .12);
+  }
+}
+
+body.admin-page .admin-count-pulse {
+  animation: adminCountPulse .52s cubic-bezier(.2,.8,.2,1);
+}
+
+body.admin-page .admin-data-arrival {
+  animation: adminDataArrival .48s cubic-bezier(.2,.75,.2,1) both;
+}
+
+body.admin-page .chart-bar,
+body.admin-page .realtime-bar i,
+body.admin-page .service-breakdown i {
+  transform-origin: bottom;
+}
+
+body.admin-page .admin-bar-grow {
+  animation: adminBarGrow .72s cubic-bezier(.2,.8,.2,1) both;
+}
+
+body.admin-page .live-chip {
+  animation: adminChipGlow 2.4s ease-in-out infinite;
+}
+
+body.admin-page .admin-notification-count.has-items {
+  animation: adminBadgePop .45s cubic-bezier(.2,.9,.2,1.2);
+}
+
+body.admin-page .sidebar.open .side-nav a {
+  animation: adminDrawerLink .36s ease both;
+}
+body.admin-page .sidebar.open .side-nav a:nth-of-type(2) { animation-delay: .025s; }
+body.admin-page .sidebar.open .side-nav a:nth-of-type(3) { animation-delay: .05s; }
+body.admin-page .sidebar.open .side-nav a:nth-of-type(4) { animation-delay: .075s; }
+body.admin-page .sidebar.open .side-nav a:nth-of-type(5) { animation-delay: .10s; }
+body.admin-page .sidebar.open .side-nav a:nth-of-type(6) { animation-delay: .125s; }
+body.admin-page .sidebar.open .side-nav a:nth-of-type(7) { animation-delay: .15s; }
+body.admin-page .sidebar.open .side-nav a:nth-of-type(8) { animation-delay: .175s; }
+body.admin-page .sidebar.open .side-nav a:nth-of-type(9) { animation-delay: .20s; }
+body.admin-page .sidebar.open .side-nav a:nth-of-type(10) { animation-delay: .225s; }
+
+@keyframes adminHeroSweep {
+  to { transform: translateX(18%); }
+}
+
+@keyframes adminLivePulse {
+  0%,100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(48, 207, 132, .25); }
+  50% { opacity: .62; transform: scale(.82); box-shadow: 0 0 0 7px rgba(48, 207, 132, 0); }
+}
+
+@keyframes adminIconFloat {
+  0%,100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-3px) rotate(2deg); }
+}
+
+@keyframes adminCountPulse {
+  0% { transform: scale(1); filter: brightness(1); }
+  42% { transform: scale(1.12); filter: brightness(1.18); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+@keyframes adminDataArrival {
+  from { opacity: .35; transform: translateY(9px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes adminBarGrow {
+  from { transform: scaleY(.08); opacity: .35; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+
+@keyframes adminChipGlow {
+  0%,100% { box-shadow: 0 0 0 rgba(32, 200, 145, 0); }
+  50% { box-shadow: 0 0 18px rgba(32, 200, 145, .18); }
+}
+
+@keyframes adminBadgePop {
+  0% { transform: scale(.5); }
+  70% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+@keyframes adminDrawerLink {
+  from { opacity: .25; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 767px) {
+  body.admin-page .hero::before {
+    animation-duration: 10s;
+  }
+  body.admin-page .metric-icon {
+    animation-duration: 5.6s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.admin-page *,
+  body.admin-page *::before,
+  body.admin-page *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
