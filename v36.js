@@ -3,6 +3,8 @@
   if (!root) return;
 
   const track = root.querySelector('[data-learning-journey-track]');
+  if (!track) return;
+
   const cards = [...track.querySelectorAll('[data-journey-step]')];
   const status = root.querySelector('[data-learning-journey-status]');
   const progress = root.querySelector('[data-learning-journey-progress]');
@@ -23,19 +25,51 @@
   let current = 0;
   let timer = null;
   let resumeTimer = null;
-  let isVisible = false;
   let scrollTimer = null;
+  let isVisible = false;
+
+  const stop = () => {
+    if (timer) window.clearInterval(timer);
+    timer = null;
+    if (resumeTimer) window.clearTimeout(resumeTimer);
+    resumeTimer = null;
+  };
+
+  // Desktop must remain exactly as the original five-column journey.
+  // No active card, scrolling, ARIA hiding, progress animation, or autoplay is applied.
+  const restoreDesktop = () => {
+    stop();
+    current = 0;
+    cards.forEach(card => {
+      card.classList.remove('is-active');
+      card.removeAttribute('aria-hidden');
+    });
+    dots.forEach(dot => {
+      dot.classList.remove('is-active');
+      dot.removeAttribute('aria-current');
+    });
+    if (status) status.textContent = 'STEP 1 OF 5 · 20% COMPLETE';
+    if (progress) progress.style.removeProperty('width');
+    if (knob) knob.style.removeProperty('left');
+    track.scrollLeft = 0;
+  };
 
   const centreCard = (index, smooth = true) => {
+    if (!mobile.matches) return;
     const card = cards[index];
-    if (!card || !mobile.matches) return;
+    if (!card) return;
     const left = card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2;
     const behavior = smooth && !reducedMotion.matches ? 'smooth' : 'auto';
     if (typeof track.scrollTo === 'function') track.scrollTo({ left, behavior });
     else track.scrollLeft = left;
   };
 
-  const render = (index, { smooth = true, announce = true } = {}) => {
+  const renderMobile = (index, { smooth = true, announce = true } = {}) => {
+    if (!mobile.matches) {
+      restoreDesktop();
+      return;
+    }
+
     current = (index + cards.length) % cards.length;
     cards.forEach((card, cardIndex) => {
       const active = cardIndex === current;
@@ -45,7 +79,8 @@
     dots.forEach((dot, dotIndex) => {
       const active = dotIndex === current;
       dot.classList.toggle('is-active', active);
-      dot.setAttribute('aria-current', active ? 'step' : 'false');
+      if (active) dot.setAttribute('aria-current', 'step');
+      else dot.removeAttribute('aria-current');
     });
 
     const percent = ((current + 1) / cards.length) * 100;
@@ -56,31 +91,31 @@
     centreCard(current, smooth);
   };
 
-  const stop = () => {
+  const start = () => {
     if (timer) window.clearInterval(timer);
     timer = null;
-  };
-
-  const start = () => {
-    stop();
     if (!mobile.matches || reducedMotion.matches || !isVisible || document.hidden) return;
-    timer = window.setInterval(() => render(current + 1), 3400);
+    timer = window.setInterval(() => renderMobile(current + 1), 3400);
   };
 
   const pauseThenResume = () => {
-    stop();
+    if (!mobile.matches) return;
+    if (timer) window.clearInterval(timer);
+    timer = null;
     if (resumeTimer) window.clearTimeout(resumeTimer);
     resumeTimer = window.setTimeout(start, 6500);
   };
 
   nextButton?.addEventListener('click', () => {
-    render(current + 1);
+    if (!mobile.matches) return;
+    renderMobile(current + 1);
     pauseThenResume();
   });
 
   dots.forEach((dot, index) => {
     dot.addEventListener('click', () => {
-      render(index);
+      if (!mobile.matches) return;
+      renderMobile(index);
       pauseThenResume();
     });
   });
@@ -102,37 +137,49 @@
           nearest = index;
         }
       });
-      if (nearest !== current) render(nearest, { smooth: false, announce: true });
+      if (nearest !== current) renderMobile(nearest, { smooth: false, announce: true });
     }, 110);
   }, { passive: true });
 
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => {
       isVisible = entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.35);
+      if (!mobile.matches) return;
       if (isVisible) {
-        render(current, { smooth: false, announce: false });
+        renderMobile(current, { smooth: false, announce: false });
         start();
-      } else {
-        stop();
+      } else if (timer) {
+        window.clearInterval(timer);
+        timer = null;
       }
     }, { threshold: [0, .35, .7] });
     observer.observe(root);
   } else {
     isVisible = true;
-    start();
   }
+
+  const onMediaChange = () => {
+    if (mobile.matches) {
+      current = 0;
+      renderMobile(0, { smooth: false, announce: false });
+      start();
+    } else {
+      restoreDesktop();
+    }
+  };
 
   const bindMediaChange = (query, handler) => {
     if (typeof query.addEventListener === 'function') query.addEventListener('change', handler);
     else if (typeof query.addListener === 'function') query.addListener(handler);
   };
-  bindMediaChange(mobile, () => {
-    render(0, { smooth: false, announce: false });
-    start();
-  });
+
+  bindMediaChange(mobile, onMediaChange);
   bindMediaChange(reducedMotion, start);
   document.addEventListener('visibilitychange', start);
-  window.addEventListener('resize', () => centreCard(current, false), { passive: true });
+  window.addEventListener('resize', () => {
+    if (mobile.matches) centreCard(current, false);
+  }, { passive: true });
 
-  render(0, { smooth: false, announce: false });
+  if (mobile.matches) renderMobile(0, { smooth: false, announce: false });
+  else restoreDesktop();
 })();
