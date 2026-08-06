@@ -1,0 +1,113 @@
+/* Nexarvia V55 — isolated viewport and mobile chrome corrections.
+   No content, journey percentages, desktop composition, forms, or features are changed. */
+
+/* The desktop-mirror mode is reserved for real phones/tablets. The bootstrap
+   detection was refined so touchscreen Windows laptops render at full width. */
+
+/* Mobile-only header enlargement while preserving the V53/V54 desktop mirror. */
+html.nx-desktop-mirror-mode .nx-site-header{
+  min-height:96px!important;
+}
+html.nx-desktop-mirror-mode .nx-header-shell{
+  min-height:96px!important;
+  width:calc(100% - 40px)!important;
+  gap:24px!important;
+}
+html.nx-desktop-mirror-mode .nx-brand{
+  gap:14px!important;
+}
+html.nx-desktop-mirror-mode .nx-brand img{
+  width:56px!important;
+  height:56px!important;
+}
+html.nx-desktop-mirror-mode .nx-brand-copy strong{
+  font-size:20px!important;
+}
+html.nx-desktop-mirror-mode .nx-brand-copy small{
+  margin-top:6px!important;
+  font-size:9px!important;
+}
+html.nx-desktop-mirror-mode .nx-primary-nav{
+  gap:22px!important;
+}
+html.nx-desktop-mirror-mode .nx-primary-nav a{
+  padding:36px 0!important;
+  font-size:13px!important;
+}
+html.nx-desktop-mirror-mode .nx-primary-nav a::after{
+  bottom:24px!important;
+}
+html.nx-desktop-mirror-mode .nx-header-tools{
+  gap:10px!important;
+}
+html.nx-desktop-mirror-mode .nx-notification-button,
+html.nx-desktop-mirror-mode .nx-menu-button{
+  width:54px!important;
+  height:54px!important;
+}
+html.nx-desktop-mirror-mode .nx-header-action,
+html.nx-desktop-mirror-mode .nx-student-login-link{
+  min-height:54px!important;
+  padding-inline:22px!important;
+  font-size:13px!important;
+}
+
+/* Mobile-only footer enlargement. Existing columns, links, and content stay intact. */
+html.nx-desktop-mirror-mode .nx-footer{
+  padding-top:94px!important;
+}
+html.nx-desktop-mirror-mode .nx-footer-cta,
+html.nx-desktop-mirror-mode .nx-footer-grid,
+html.nx-desktop-mirror-mode .nx-footer-bottom{
+  width:calc(100% - 48px)!important;
+}
+html.nx-desktop-mirror-mode .nx-footer-cta{
+  padding:46px 48px!important;
+  gap:44px!important;
+  border-radius:28px!important;
+}
+html.nx-desktop-mirror-mode .nx-footer-cta span{
+  font-size:13px!important;
+}
+html.nx-desktop-mirror-mode .nx-footer-cta h2{
+  font-size:42px!important;
+}
+html.nx-desktop-mirror-mode .nx-footer-cta .nx-btn{
+  min-height:58px!important;
+  padding-inline:26px!important;
+  font-size:14px!important;
+}
+html.nx-desktop-mirror-mode .nx-footer-grid{
+  margin-top:76px!important;
+  gap:64px!important;
+}
+html.nx-desktop-mirror-mode .nx-footer-brand img{
+  width:250px!important;
+}
+html.nx-desktop-mirror-mode .nx-footer-brand p{
+  max-width:430px!important;
+  font-size:15px!important;
+}
+html.nx-desktop-mirror-mode .nx-footer-brand strong{
+  font-size:12px!important;
+}
+html.nx-desktop-mirror-mode .nx-footer h3{
+  margin-bottom:23px!important;
+  font-size:16px!important;
+}
+html.nx-desktop-mirror-mode .nx-footer nav{
+  gap:15px!important;
+}
+html.nx-desktop-mirror-mode .nx-footer nav a,
+html.nx-desktop-mirror-mode .nx-footer-switch{
+  font-size:14px!important;
+}
+html.nx-desktop-mirror-mode .nx-footer-bottom{
+  margin-top:62px!important;
+  padding:28px 0 38px!important;
+  font-size:12px!important;
+}
+html.nx-desktop-mirror-mode .nx-footer-bottom .nx-admin-footer-link{
+  padding:12px 17px!important;
+  font-size:12px!important;
+}
