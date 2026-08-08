@@ -2,12 +2,27 @@
 const onReady=()=>{
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* Final timing: the V48 carousel already owns the timer and starts at item 01.
-     Keep a calm 2-second hold so the next card feels anticipated rather than abrupt. */
+  /* Make the existing V48 carousel satisfy the final 1-second timing request.
+     We replace only the interval behavior; V48 still owns drag/arrow/dot mechanics. */
   const carousel=document.querySelector('[data-nx47-carousel]');
   if(carousel){
     const autoText=carousel.querySelector('.nx47-auto span:first-child');
-    if(autoText)autoText.textContent='Auto-switching every 2s';
+    if(autoText)autoText.textContent='Auto-switching every 1s';
+
+    /* V48 interval is scoped inside its closure, so dispatch a Next click once per second.
+       Native click keeps the same render/direction code and restarts V48's own timer safely. */
+    const next=carousel.querySelector('[data-nx47-next]');
+    const mq=matchMedia('(max-width: 820px)');
+    let fastTimer=null;
+    const stopFast=()=>{if(fastTimer){clearInterval(fastTimer);fastTimer=null;}};
+    const startFast=()=>{
+      stopFast();
+      if(reduce||!mq.matches||document.hidden||!next)return;
+      fastTimer=setInterval(()=>{if(!document.hidden)next.click();},1000);
+    };
+    document.addEventListener('visibilitychange',()=>document.hidden?stopFast():startFast());
+    mq.addEventListener?.('change',startFast);
+    startFast();
   }
 
   /* Scroll progress. */
