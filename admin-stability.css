@@ -1,0 +1,21 @@
+/* Nexarvia V40 — authentication pages and dashboard remain visible by default. */
+html,body{visibility:visible!important}
+.crm-login-intro,.crm-login-card,.crm-login-copy,.crm-login-panel{opacity:1!important;transform:none!important}
+.admin-page .panel,.admin-page .metric,.admin-page .hero{opacity:1;visibility:visible}
+.crm-login-card form{display:grid;gap:0}
+.login-message{min-height:24px;margin:10px 0 0;color:#e63d57;font-size:12px;line-height:1.45;text-align:center}
+.login-message[data-type="success"]{color:#1c8b61}
+#firebaseLoginStatus[data-state="ready"] i{background:#38c77a!important;box-shadow:0 0 0 4px rgba(56,199,122,.14)}
+#firebaseLoginStatus[data-state="error"] i{background:#ef5268!important;box-shadow:0 0 0 4px rgba(239,82,104,.14)}
+.crm-login-button:disabled{opacity:.72;cursor:not-allowed}
+.admin-auth-gate{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:24px;background:rgba(3,12,26,.86);backdrop-filter:blur(10px)}
+.admin-auth-gate[hidden]{display:none!important}
+.admin-auth-gate__card{width:min(440px,100%);padding:30px;border:1px solid rgba(91,180,255,.28);border-radius:24px;background:linear-gradient(155deg,#071a31,#0c2c53);box-shadow:0 28px 90px rgba(0,0,0,.46);color:#fff;text-align:center}
+.admin-auth-gate__card img{width:58px;height:58px;object-fit:contain;margin-bottom:14px;filter:drop-shadow(0 0 18px rgba(37,183,255,.34))}
+.admin-auth-gate__spinner{display:block;width:34px;height:34px;margin:0 auto 16px;border:3px solid rgba(255,255,255,.18);border-top-color:#31c7ff;border-radius:50%;animation:adminGateSpin .8s linear infinite}
+.admin-auth-gate[data-state="error"] .admin-auth-gate__spinner{animation:none;border-color:#ef5268;background:radial-gradient(circle,#ef5268 0 30%,transparent 34%)}
+.admin-auth-gate__card strong{display:block;font:800 22px Manrope,Inter,sans-serif}.admin-auth-gate__card p{margin:10px 0 0;color:#a9bfd4;font-size:13px;line-height:1.6}
+.admin-auth-gate__actions{margin-top:20px;display:flex;justify-content:center;gap:10px}.admin-auth-gate__actions[hidden]{display:none!important}.admin-auth-gate__actions button,.admin-auth-gate__actions a{min-height:42px;padding:0 15px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #2d6a9d;border-radius:11px;background:#0c3c69;color:#fff;font:700 12px Inter,sans-serif;text-decoration:none;cursor:pointer}.admin-auth-gate__actions a{background:#fff;color:#0b2745}
+@keyframes adminGateSpin{to{transform:rotate(360deg)}}
+@media(max-width:767px){.admin-auth-gate{padding:14px}.admin-auth-gate__card{padding:24px 18px;border-radius:20px}.admin-auth-gate__card strong{font-size:19px}}
+@media(prefers-reduced-motion:reduce){.admin-auth-gate__spinner{animation:none}}

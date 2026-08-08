@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<title>Nexarvia Technologies — Admin Command Center</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="admin.css" rel="stylesheet"/><link href="admin-stability.css" rel="stylesheet"/><link href="admin-responsive-v43.css" rel="stylesheet"/><link href="admin-motion-v43.css" rel="stylesheet"/></head>
+<body class="admin-page admin-corporate-v15" data-admin-build="v43"><div aria-live="polite" class="admin-auth-gate" id="adminAuthGate" role="status">
+<div class="admin-auth-gate__card">
+<img alt="" src="nexarvia-mark.png"/>
+<span aria-hidden="true" class="admin-auth-gate__spinner"></span>
+<strong id="adminAuthGateTitle">Checking administrator session…</strong>
+<p id="adminAuthGateMessage">Please wait while Firebase Authentication verifies secure access.</p>
+<div class="admin-auth-gate__actions" hidden="" id="adminAuthGateActions">
+<button id="adminAuthRetry" type="button">Retry</button>
+<a href="login.html">Return to Login</a>
+</div>
+</div>
+</div>
+<div class="app-shell">
+<aside class="sidebar" id="sidebar">
+<a class="brand skillpath-admin-brand nexarvia-admin-brand" href="#dashboard"><img alt="Nexarvia Technologies" src="nexarvia-logo-light.png"/></a>
+<nav class="side-nav">
+<a class="active" href="#dashboard">⌂ <span>Dashboard</span></a>
+<p>MONITORING</p><a href="#liveVisitors">◉ <span>Live Visitors</span></a><a href="#activity">⌁ <span>Real-time Activity</span></a>
+<p>APPLICATIONS</p><a href="#applications">▤ <span>Recent Applications</span></a><a href="#analytics">⌁ <span>Analytics</span></a>
+<p>TECHNOLOGY SERVICES</p><a href="#technologyInquiries">▦ <span>Business Inquiries</span></a>
+<p>REFERRALS</p><a href="#referralOverview">♙ <span>Overview</span></a><a href="#referralLeaderboard">★ <span>Leaderboard</span></a><a href="#referralFriends">♧ <span>Friends Joined</span></a>
+<p>SETTINGS</p><a href="#announcements">✦ <span>Website Notices</span></a><a href="#settings">⚙ <span>Data Controls</span></a>
+</nav>
+<div class="side-profile"><span class="avatar">A</span><div><strong>Administrator</strong><small>Super Admin</small></div><button aria-label="Logout" onclick="logout()">↪</button></div>
+</aside>
+<div class="mobile-overlay" id="mobileOverlay"></div>
+<section class="workspace">
+<header class="topbar corporate-admin-topbar">
+<button aria-label="Open navigation" class="menu-toggle" id="menuToggle">☰</button>
+<a aria-label="Nexarvia Technologies admin dashboard" class="admin-mobile-brand" href="#dashboard"><img alt="" src="nexarvia-mark.png"/><span><strong>Nexarvia</strong><small>TECHNOLOGIES · OPERATIONS</small></span></a>
+<div class="welcome"><span class="admin-breadcrumb">Nexarvia Technologies / Administration</span><h1>Operations Dashboard</h1><p>Learning applications, live activity, referrals and Technology Services enquiries.</p></div>
+<div class="topbar-tools"><div class="admin-notification-wrap"><button aria-label="Open notification centre" class="admin-notification-button" id="adminNotificationButton" type="button">🔔<span class="admin-notification-count" id="adminNotificationCount">0</span></button></div>
+<div class="connection" id="portalLiveStatus"><i></i><span id="portalLiveText">Connecting…</span></div>
+<button aria-pressed="false" class="sound-quick-toggle" id="soundQuickToggle" title="Enable notification sound" type="button">🔇</button>
+<div class="clock"><strong id="liveClock">--:--</strong><small id="liveDate">--</small></div>
+<a class="portal-btn" href="index.html" aria-label="Return to Nexarvia Technologies home"><span class="portal-btn-icon" aria-hidden="true">⌂</span><span class="portal-btn-label">Home</span></a>
+</div>
+</header>
+<main>
+<section class="hero" id="dashboard"><div><span class="eyebrow">REAL-TIME CONTROL CENTER</span><h2>Learning &amp; Technology Operations</h2><p>Active sessions expire automatically, abandoned forms are detected, and every card recalculates from Firebase source data.</p></div><div class="hero-status"><span>System Health</span><strong><i></i> Live &amp; Synced</strong><small id="lastUpdatedText">Waiting for data…</small></div></section>
+<section class="metric-grid">
+<article class="metric"><span class="metric-icon blue">◉</span><div><p>Live Visitors</p><h3 id="onlineCount">0</h3><small>Verified foreground heartbeat in last 24 sec</small></div></article>
+<article class="metric"><span class="metric-icon amber">✎</span><div><p>Currently Filling</p><h3 id="fillingCount">0</h3><small>Form in progress</small></div></article>
+<article class="metric"><span class="metric-icon green">✓</span><div><p>Submitted Today</p><h3 id="submittedCount">0</h3><small>Successful applications</small></div></article>
+<article class="metric"><span class="metric-icon violet">↗</span><div><p>Conversion Rate</p><h3 id="conversionRate">0%</h3><small>24-hour submissions ÷ sessions</small></div></article>
+<article class="metric"><span class="metric-icon rose">×</span><div><p>Abandoned</p><h3 id="abandonedCount">0</h3><small>Expired incomplete forms</small></div></article>
+</section>
+<section class="dashboard-grid">
+<article class="panel panel-wide" id="activity"><header><div><span class="eyebrow">APPLICATION FLOW</span><h2>7-Day Applications Overview</h2></div><span class="live-chip">● Live</span></header><div class="bar-chart" id="applicationsChart"></div></article>
+<article class="panel" id="analytics"><header><div><span class="eyebrow">COLLEGE INSIGHTS</span><h2>Top Colleges</h2></div></header><div class="rank-list" id="topColleges"><p class="empty">No data yet…</p></div></article>
+<article class="panel live-panel" id="liveVisitors"><header><div><span class="eyebrow">PRESENCE</span><h2>Active Visitors</h2></div><button aria-label="Refresh dashboard and clear abandoned sessions" class="icon-action refresh-action" id="refreshDashboardButton" type="button"><span>↻</span><small>Refresh</small></button></header><div class="visitor-list" id="visitorList"><p class="empty">Waiting for visitors…</p></div></article>
+<article class="panel" id="applications"><header><div><span class="eyebrow">LATEST DATA</span><h2>Recent Applications</h2></div>
+<button class="panel-action" id="exportApplicationsButton" type="button">Export CSV</button>
+</header><div class="application-list" id="recentApplications"><p class="empty">No applications yet…</p></div></article>
+<article class="panel" id="applicationsByDomain"><header><div><span class="eyebrow">DOMAIN INSIGHTS</span><h2>Applications by Domain</h2></div></header><div class="rank-list" id="topDomains"><p class="empty">No data yet…</p></div></article>
+</section>
+<section class="section-head" id="referralOverview"><div><span class="eyebrow">REFERRAL MANAGEMENT</span><h2>Referral Performance</h2><p>Live referral profiles, joins and reward eligibility.</p></div></section>
+<section class="referral-metrics"><article><span>Total Codes</span><strong id="totalReferralCodes">0</strong></article><article><span>Referral Visits</span><strong id="totalReferralVisits">0</strong></article><article><span>Link Shares</span><strong id="totalReferralShares">0</strong></article><article><span>Successful Referrals</span><strong id="successfulReferrals">0</strong></article><article><span>Visit-to-Submit</span><strong id="referralConversionRate">0%</strong></article><article><span>Top Ambassador</span><strong id="topAmbassador">—</strong><small id="topAmbassadorCount">No referrals yet</small></article></section>
+<section class="two-col">
+<article class="panel" id="referralLeaderboard"><header><div><span class="eyebrow">TOP PERFORMERS</span><h2>Referral Leaderboard</h2></div></header><div class="table-wrap"><table><thead><tr><th>#</th><th>Student</th><th>Code</th><th>Visits</th><th>Starts</th><th>Shares</th><th>Joined</th><th>Status</th></tr></thead><tbody id="referralLeaderboardBody"><tr><td class="empty" colspan="8">No referral data yet…</td></tr></tbody></table></div></article>
+<article class="panel" id="referralFriends"><header><div><span class="eyebrow">REFERRAL ACTIVITY</span><h2>Friends Joined</h2></div><input id="referralSearch" placeholder="Search" type="search"/></header><div class="table-wrap"><table><thead><tr><th>Applicant</th><th>Referred By</th><th>College</th><th>Domain</th><th>Joined</th></tr></thead><tbody id="referralFriendsBody"><tr><td class="empty" colspan="5">No referred applications yet…</td></tr></tbody></table></div></article>
+</section>
+<section class="section-head" id="technologyInquiries"><div><span class="eyebrow">TECHNOLOGY SERVICES</span><h2>Business Inquiry Management</h2><p>Review client requirements, update pipeline status and manage follow-up.</p></div><div class="inquiry-head-actions"><input id="technologyInquirySearch" placeholder="Search inquiries" type="search"/><button class="panel-action" id="exportTechnologyInquiries" type="button">Export CSV</button></div></section>
+<section class="referral-metrics technology-inquiry-metrics"><article><span>Total Inquiries</span><strong id="technologyInquiryTotal">0</strong></article><article><span>New</span><strong id="technologyInquiryNew">0</strong></article><article><span>Qualified</span><strong id="technologyInquiryQualified">0</strong></article><article><span>Proposal Stage</span><strong id="technologyInquiryProposal">0</strong></article><article><span>Confirmed</span><strong id="technologyInquiryConfirmed">0</strong></article></section><section class="realtime-insight-grid"><article class="panel realtime-chart"><header><div><span class="eyebrow">REAL-TIME ENQUIRY TREND</span><h2>Technology Enquiries — Last 7 Days</h2><p>Calculated directly from Firebase submission timestamps.</p></div><span class="live-chip">● Live</span></header><div class="realtime-bars" id="technologyInquiryRealtimeChart"><p class="empty">No enquiry data yet.</p></div></article><article class="panel"><header><div><span class="eyebrow">SERVICE DEMAND</span><h2>Enquiries by Service</h2><p>Live distribution of requested services.</p></div></header><div class="service-breakdown" id="technologyServiceBreakdown"><p class="empty">No enquiry data yet.</p></div></article></section>
+<section class="panel technology-inquiry-panel"><header><div><span class="eyebrow">CLIENT REQUIREMENTS</span><h2>Technology Service Inquiries</h2></div><span class="live-chip">● Firebase</span></header><div class="table-wrap"><table class="technology-inquiry-table"><thead><tr><th>Reference</th><th>Client</th><th>Service</th><th>Budget</th><th>Timeline</th><th>Submitted</th><th>Status</th><th>Details</th></tr></thead><tbody id="technologyInquiryBody"><tr><td class="empty" colspan="8">No technology inquiries yet…</td></tr></tbody></table></div></section>
+<section class="panel" id="announcements"><header><div><span class="eyebrow">PUBLIC NOTIFICATION PANEL</span><h2>Website Announcements</h2><p>Publish short notices to the corporate, Learning or Technology Services notification panel.</p></div></header><form class="announcement-form" id="announcementForm"><label>Title<input id="announcementTitle" maxlength="100" required=""/></label><label>Audience<select id="announcementAudience"><option value="all">All pages</option><option value="corporate">Corporate homepage</option><option value="learning">Nexarvia Learning</option><option value="services">Technology Services</option></select></label><label class="wide">Message<textarea id="announcementMessage" maxlength="500" required=""></textarea></label><button class="panel-action" type="submit">Publish Notice</button></form><div class="announcement-list" id="announcementList"><p class="empty">No announcements yet.</p></div></section><section class="panel settings" id="settings">
+<header><div><span class="eyebrow">ADMINISTRATION</span><h2>Settings &amp; Data Controls</h2></div></header>
+<div class="notification-settings">
+<div class="setting-copy">
+<span class="setting-icon">🔔</span>
+<div><strong>New Application Alerts</strong><small>Play a loud two-stage alert and show a toast only for genuinely new submissions.</small></div>
+</div>
+<label class="switch-row">
+<input id="soundEnabled" type="checkbox"/>
+<span class="switch"></span>
+<b>Sound</b>
+</label>
+<label class="volume-row">Volume
+    <input id="notificationVolume" max="100" min="0" type="range" value="90"/>
+<output id="volumeValue">90%</output>
+</label>
+<button class="panel-action" id="testSoundButton" type="button">Test Sound</button>
+<button class="panel-action secondary" id="browserNotificationButton" type="button">Enable Browser Alerts</button>
+</div>
+<div class="system-health-grid">
+<article><i id="firebaseHealthDot"></i><span>Firebase</span><strong id="firebaseHealthText">Checking</strong></article>
+<article><i id="trackingHealthDot"></i><span>Live Tracking</span><strong id="trackingHealthText">Checking</strong></article>
+<article><i id="applicationsHealthDot"></i><span>Applications</span><strong id="applicationsHealthText">Checking</strong></article>
+<article><i id="referralHealthDot"></i><span>Referral System</span><strong id="referralHealthText">Checking</strong></article>
+<article><i id="inquiriesHealthDot"></i><span>Service Inquiries</span><strong id="inquiriesHealthText">Checking</strong></article><article><i class="healthy"></i><span>Sound Alerts</span><strong id="soundHealthText">Disabled</strong></article>
+</div>
+<div class="settings-grid"><button onclick="deleteTechnologyInquiries()"><b>Delete Service Inquiries</b><span>Remove Technology Services enquiry records</span></button><button onclick="deleteLiveVisitors()"><b>Clear Tracking</b><span>Delete live session records</span></button><button onclick="deleteApplications()"><b>Delete Applications</b><span>Remove submitted records</span></button><button onclick="deleteReferralData()"><b>Delete Referrals</b><span>Remove referral records</span></button><button class="danger-reset-card" id="clearAllDashboardDataButton" type="button"><b>Clear All Current Data</b><span>Delete applications, enquiries, tracking, referrals and announcements</span></button></div></section>
+</main>
+<footer class="admin-footer">
+<div><strong>Nexarvia Technologies Administration</strong><span>Live operations secured through Firebase</span></div>
+<nav aria-label="Admin footer links"><a href="index.html">Home</a><a href="technology-services.html">Technology Services</a><a href="learning.html">Learning Website</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><button onclick="logout()" type="button">Sign Out</button></nav>
+<small>Version 8.0 Unified Operations</small>
+</footer>
+<nav aria-label="Mobile admin navigation" class="bottom-nav">
+<a href="#dashboard">⌂<span>Dashboard</span></a>
+<a href="#liveVisitors">◉<span>Live Visitors</span></a>
+<a href="#activity">⌁<span>Activity</span></a>
+<a href="#applications">▤<span>Applications</span></a>
+<a href="#analytics">◫<span>Analytics</span></a>
+<a href="#technologyInquiries">▦<span>Inquiries</span></a>
+<a href="#referralOverview">♙<span>Referrals</span></a>
+<a href="#referralLeaderboard">★<span>Leaderboard</span></a>
+<a href="#referralFriends">♧<span>Friends Joined</span></a>
+<a href="#settings">⚙<span>Settings</span></a>
+<button id="moreNav" type="button">☰<span>Full Menu</span></button>
+</nav>
+<aside aria-hidden="true" class="admin-notification-drawer" id="adminNotificationDrawer"><div class="admin-notification-head"><h2>Operational Notifications</h2><button aria-label="Close notifications" id="adminNotificationClose" type="button">×</button></div><div class="admin-notification-list" id="adminNotificationList"><div class="admin-alert-empty">Waiting for real-time activity…</div></div></aside></section></div>
+<div aria-atomic="true" aria-live="polite" class="admin-toast-region" id="adminToastRegion"></div>
+<div aria-hidden="true" class="refresh-overlay" id="refreshOverlay">
+<div><span class="refresh-spinner"></span><strong>Refreshing dashboard</strong><small>Cleaning abandoned sessions and loading fresh data…</small></div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script><script src="firebase.js"></script><script src="admin.js"></script>
+<script src="admin-responsive-v43.js"></script><script src="admin-data-tools-v46.js"></script><script src="admin-motion-v43.js"></script></body></html>
