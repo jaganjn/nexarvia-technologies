@@ -162,15 +162,15 @@ const ready=()=>{
   }
 
   const iconSets={
-    capabilities:['⌁','</>','↻','◇'],
-    principles:['✓','◎','◇','↗'],
-    audience:['◉','↗','◇','▦']
+    capabilities:['🎓','💻','⚙️','🧠'],
+    principles:['🎯','💡','✨','🔄'],
+    audience:['🎓','💼','🚀','🏢']
   };
   const addCardIcons=(selector,icons)=>{
     [...document.querySelectorAll(selector)].forEach((card,i)=>{
       const icon=document.createElement('span');
-      icon.className='nx50-card-icon';icon.setAttribute('aria-hidden','true');
-      icon.textContent=icons[i]||'◇';
+      icon.className='nx50-card-icon nx51-emoji';icon.setAttribute('aria-hidden','true');
+      icon.textContent=icons[i]||'✨';
       card.prepend(icon);
     });
   };
@@ -184,10 +184,10 @@ const ready=()=>{
     approach.classList.add('nx50-flow');
     const rail=document.createElement('span');rail.className='nx50-flow-rail';rail.setAttribute('aria-hidden','true');
     flowFill=document.createElement('i');rail.appendChild(flowFill);approach.prepend(rail);
-    const symbols=['◎','◇','▦','↗'];
+    const symbols=['🔎','🧭','🛠️','📈'];
     [...approach.querySelectorAll('.nx47-step')].forEach((step,i)=>{
       step.style.setProperty('--nx50-step',i);
-      const symbol=document.createElement('span');symbol.className='nx50-step-symbol';symbol.setAttribute('aria-hidden','true');symbol.textContent=symbols[i];
+      const symbol=document.createElement('span');symbol.className='nx50-step-symbol nx51-emoji';symbol.setAttribute('aria-hidden','true');symbol.textContent=symbols[i];
       step.appendChild(symbol);
     });
   }
