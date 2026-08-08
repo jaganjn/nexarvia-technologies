@@ -18,7 +18,6 @@ function nav(items,cls){const n=document.createElement('nav');n.className=cls;n.
 function publicNav(type){if(document.querySelector('.nx38-bottom-nav'))return;let items;
 if(type==='home')items=[
   {href:'index.html',icon:'home',label:'Home'},
-  {href:'technology-services.html',icon:'services',label:'Services'},
   {href:'#mission',icon:'journey',label:'Mission'},
   {href:'#contact',icon:'enquiry',label:'Contact'}
 ];
