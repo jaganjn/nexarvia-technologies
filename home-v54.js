@@ -81,6 +81,8 @@
       let startX = 0;
       let deltaX = 0;
       let resetTimer = null;
+      let inView = false;
+      let hasEntered = false;
 
       const clearTimer = () => { if (timer) { clearTimeout(timer); timer = null; } };
       const visibleCount = () => mobileMq.matches ? 1 : (sectionSelector === '#approach' ? 3 : 3);
@@ -120,7 +122,7 @@
 
       const schedule = () => {
         clearTimer();
-        if (reduce || document.hidden) return;
+        if (reduce || document.hidden || !inView) return;
         nav.classList.remove('is-paused');
         nav.classList.add('is-running');
         resetProgress();
@@ -134,7 +136,7 @@
 
       const render = (animate = true) => {
         if (!mobileMq.matches && window.innerWidth < 821) return;
-        track.style.transition = animate ? `transform ${SHIFT}ms cubic-bezier(.2,.78,.22,1)` : 'none';
+        track.style.transition = animate ? `transform ${SHIFT}ms cubic-bezier(.22,.78,.2,1)` : 'none';
         track.style.transform = `translate3d(${-targetFor(index)}px,0,0)`;
         updateStates();
         if (!animate) {
@@ -142,6 +144,21 @@
           track.style.transition = '';
         }
         schedule();
+      };
+
+      const resetToFirst = () => {
+        clearTimer();
+        clearTimeout(resetTimer);
+        index = 0;
+        track.style.transition = 'none';
+        track.style.transform = 'translate3d(0,0,0)';
+        updateStates();
+        resetProgress();
+        // Let the browser commit the first frame before enabling the transition.
+        requestAnimationFrame(() => {
+          track.style.transition = '';
+          schedule();
+        });
       };
 
       const go = (next, user) => {
@@ -199,13 +216,34 @@
       viewport.addEventListener('pointercancel', endDrag);
       slides.forEach(slide => slide.addEventListener('click', e => { if (moved) e.preventDefault(); }));
 
-      document.addEventListener('visibilitychange', () => document.hidden ? stop() : schedule());
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stop();
+        else if (inView) resetToFirst();
+      });
       window.addEventListener('resize', () => render(false), { passive: true });
       mobileMq.addEventListener?.('change', () => render(false));
 
-      // Always start from item 01 when the section initializes.
+      // Always start from item 01. Auto-play begins only when the customer
+      // actually sees this section, preventing background advancement and
+      // ensuring every newly viewed section begins from item 01.
       index = 0;
       render(false);
+
+      const observer = new IntersectionObserver(entries => {
+        const entry = entries[0];
+        if (!entry) return;
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+          if (!hasEntered || !inView) {
+            inView = true;
+            hasEntered = true;
+            resetToFirst();
+          }
+        } else if (inView) {
+          inView = false;
+          stop();
+        }
+      }, { threshold: [0, 0.35, 0.6] });
+      observer.observe(section);
     };
 
     sections.forEach(([s, t]) => makeCarousel(s, t));

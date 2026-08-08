@@ -114,3 +114,9 @@ body.nx24-home-page main,body.nx24-home-page main>section{max-width:100%;overflo
 @media (prefers-reduced-motion:reduce){
   .nx54-track,.nx54-slide,.nx54-shooting-star,.nx54-progress>i{animation:none!important;transition:none!important}
 }
+
+
+/* V54.1 smooth-transition performance pass */
+.nx54-viewport{contain:layout paint;overscroll-behavior-x:contain}
+.nx54-track{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translate3d(0,0,0);will-change:transform}
+.nx54-slide{backface-visibility:hidden;-webkit-backface-visibility:hidden}
