@@ -1,0 +1,12 @@
+NEXARVIA TECHNOLOGIES — V49 FINAL MOTION PASS
+
+Homepage updates:
+- Mobile Learning / Technology Services path auto-switch now occurs every 1 second.
+- Card shift transition refined to ~420 ms with landing/settle animation.
+- Manual swipe, arrows, dots and vertical-only page scrolling remain supported.
+- Added scroll-progress indicator.
+- Added reveal/slide/zoom transitions throughout About, Capabilities, Why Nexarvia, Approach, Mission & Vision, Who We Serve, Final CTA and Footer.
+- Added lightweight animated beams, orbit accents, card shimmer, number pop, mission/vision halos and audience-card accents.
+- Kept the established Nexarvia blue/purple neon visual identity.
+- Reduced-motion accessibility is respected.
+- Desktop content/layout remains responsive; motion enhancements also apply subtly on larger screens.
