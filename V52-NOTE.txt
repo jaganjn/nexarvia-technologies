@@ -1,0 +1,1 @@
+V52 changes: mobile horizontal auto-carousel for Capabilities, Approach, and Who We Serve; shooting-star lane added between Mission and Vision; V50 2-second hero indicator preserved; real emojis retained; vertical page scroll only.\n
