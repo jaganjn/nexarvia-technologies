@@ -1,7 +1,0 @@
-V54 final homepage interaction pass — desktop + mobile.
-- Capabilities, Why Nexarvia, Approach and Who We Serve now use horizontal auto-carousels on desktop and mobile.
-- Every carousel initializes at item 01 and holds each item for 2 seconds before a smooth 650ms transition.
-- Mobile remains vertically scrollable only; cards are horizontally swiped inside their own viewport.
-- Real section-specific emojis are retained and enlarged so they visually fill their icon containers.
-- Mission & Vision uses a true glowing shooting-star meteor: mobile top-right -> bottom-left; desktop top-left -> bottom-right.
-- Added restrained active-card sweep/depth/progress animation; no advertisements or filler content added.

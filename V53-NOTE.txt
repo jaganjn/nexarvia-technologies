@@ -1,0 +1,18 @@
+Nexarvia Technologies — V53 Final Homepage Update
+
+Implemented from the supplied V49 package:
+- Horizontal auto-scrolling carousels for Capabilities, Why Nexarvia, Our Approach and Who We Serve on mobile and desktop.
+- Every carousel resets to item 01 when the section becomes visible and on a fresh page load.
+- 2-second content hold before each automatic transition; smooth movement instead of sudden jumps.
+- Manual touch/pointer swipe remains supported.
+- Real visible emojis sized to properly fill their containers: 🎓 💻 ⚙️ 🧠 🎯 💡 ✨ 🔄 🔎 🧭 🛠️ 📈 💼 🚀 🏢.
+- Mission & Vision shooting-star animation: desktop top-left → bottom-right; mobile top-right → bottom-left, with glow and trailing tail.
+- Additional restrained card shine, active-card depth, progress/dot indicators and section motion.
+- No advertisements or filler content added.
+- Existing Firebase/admin/portal files and existing page content are preserved.
+
+Primary changed files:
+- index.html
+- home-v49.js (finalized 2-second hero timing without the previous duplicate timer behavior)
+- home-v53.css
+- home-v53.js
