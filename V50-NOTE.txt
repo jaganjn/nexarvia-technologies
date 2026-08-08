@@ -1,0 +1,18 @@
+Nexarvia Technologies — V50 Cinematic Homepage
+
+Homepage-only experience refinements:
+- Mobile path cards remain fully readable for 2 seconds before a 580ms shift.
+- Removed the 1-second forced carousel trigger from V49.
+- Removed the visible "Auto-switching" / "Swipe anytime" filler labels; retained a minimal progress cue.
+- Page is vertical-scroll only on mobile; carousel motion is clipped internally.
+- About: staged foundation statement + paragraph sequence + one-time light sweep.
+- Capabilities: sequential cards, subtle icon reveal, border trace and one-time light sweep.
+- Why Nexarvia: connected cascading principle journey.
+- Approach: scroll-synchronised Discover → Define → Build → Improve progress line.
+- Mission & Vision: paired reveal, shared connector and restrained ambient motion.
+- Who We Serve: progressive vertical journey with audience icons and active focus.
+- Final CTA: purposeful motion only; no ads, counters or promotional filler.
+- Removed the duplicate footer CTA because the final CTA directly above already serves that purpose.
+- Footer reveals progressively and remains concise.
+- Reduced-motion support retained.
+- Existing Learning, Services, Admin, Firebase, legal and portal files are unchanged.
