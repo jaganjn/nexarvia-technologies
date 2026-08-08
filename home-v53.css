@@ -1,0 +1,216 @@
+/* Nexarvia Technologies — V53 refinement pass
+   - Bigger, properly centered emoji icons
+   - Why Nexarvia mobile horizontal auto-carousel
+   - Real shooting-star effect between Mission & Vision
+   - More active-card graphics/transitions
+   - Better spacing above bottom mobile navigation
+*/
+:root{
+  --nx53-blue:#168fff;
+  --nx53-purple:#a058f1;
+  --nx53-glow:0 14px 34px rgba(16,52,97,.08),0 0 0 1px rgba(32,142,231,.08) inset;
+}
+
+/* General mobile breathing room so fixed bottom nav never covers CTA/footer area. */
+@media (max-width:820px){
+  .nx47-final{padding-bottom:138px!important}
+  .nx47-final-box{padding-bottom:34px!important}
+  .nx-footer{padding-bottom:calc(138px + env(safe-area-inset-bottom,0px))!important}
+  .nx-back-top{bottom:112px!important}
+}
+
+/* Bigger, better centred emoji/icon containers across cards. */
+.nx50-card-icon,
+.nx52-step-emoji{
+  display:grid!important;
+  place-items:center!important;
+  line-height:1!important;
+  text-align:center!important;
+  overflow:visible!important;
+}
+
+@media (max-width:820px){
+  #capabilities .nx50-card-icon,
+  #principles .nx50-card-icon,
+  #audience .nx50-card-icon{
+    width:54px!important;
+    height:54px!important;
+    min-width:54px!important;
+    min-height:54px!important;
+    border-radius:18px!important;
+    font-size:31px!important;
+    box-shadow:0 10px 24px rgba(20,72,126,.08);
+    background:linear-gradient(160deg,rgba(255,255,255,.98),rgba(234,242,255,.94))!important;
+    border:1px solid rgba(30,139,229,.12)!important;
+  }
+  #capabilities .nx50-card-icon{margin-bottom:16px!important}
+  #audience .nx50-card-icon{margin-bottom:16px!important}
+  #approach .nx52-step-emoji{
+    width:52px!important;
+    height:52px!important;
+    font-size:28px!important;
+    border-radius:18px!important;
+  }
+}
+
+/* More premium active-card effects for all carousels. */
+@media (max-width:820px){
+  #capabilities .nx52-slide,
+  #principles .nx52-slide,
+  #approach .nx52-slide,
+  #audience .nx52-slide{
+    position:relative;
+    overflow:hidden;
+    box-shadow:var(--nx53-glow);
+  }
+  #capabilities .nx52-slide:after,
+  #principles .nx52-slide:after,
+  #approach .nx52-slide:after,
+  #audience .nx52-slide:after{
+    content:"";
+    position:absolute;
+    inset:auto -18% -54% auto;
+    width:128px;height:128px;border-radius:50%;
+    background:radial-gradient(circle,rgba(50,156,255,.18),rgba(50,156,255,.08) 38%,rgba(160,88,241,.04) 58%,transparent 70%);
+    opacity:0;
+    transform:scale(.65);
+    transition:opacity .45s ease,transform .55s ease;
+    pointer-events:none;
+  }
+  #capabilities .nx52-slide.is-active:after,
+  #principles .nx52-slide.is-active:after,
+  #approach .nx52-slide.is-active:after,
+  #audience .nx52-slide.is-active:after{
+    opacity:1;transform:scale(1);
+  }
+  #capabilities .nx52-slide.is-active,
+  #principles .nx52-slide.is-active,
+  #approach .nx52-slide.is-active,
+  #audience .nx52-slide.is-active{
+    transform:translateY(-2px) scale(1.003)!important;
+    border-color:rgba(32,143,230,.28)!important;
+  }
+}
+
+/* WHY NEXARVIA joins the horizontal auto-scrolling family on mobile. */
+@media (max-width:820px){
+  #principles .nx47-grid{
+    display:flex!important;
+    grid-template-columns:none!important;
+    flex-wrap:nowrap!important;
+    gap:14px!important;
+    overflow:visible!important;
+  }
+  #principles .nx47-grid:before{display:none!important}
+  #principles .nx47-info-card{
+    width:auto!important;
+    min-height:254px!important;
+    padding:22px 22px 24px!important;
+    border-radius:24px!important;
+    display:flex;flex-direction:column;justify-content:flex-start;
+  }
+  #principles .nx47-info-card b{margin-bottom:14px!important}
+  #principles .nx47-info-card h3{font-size:18px!important;line-height:1.22!important;margin-bottom:12px!important}
+  #principles .nx47-info-card p{font-size:14px!important;line-height:1.7!important}
+}
+
+/* Mission & Vision — convert the previous dot-in-line look into a true shooting star. */
+.nx52-star-lane{
+  width:88px!important;
+  height:108px!important;
+  margin:-6px auto -6px!important;
+  overflow:visible!important;
+}
+.nx52-star-lane:before{
+  content:""!important;
+  position:absolute;
+  left:50%;top:12px;bottom:12px;width:1px;
+  transform:translateX(-50%);
+  background:linear-gradient(180deg,rgba(110,190,255,.05),rgba(110,190,255,.22),rgba(173,96,245,.18),rgba(173,96,245,.04));
+  border-radius:999px;
+}
+.nx52-shooting-star{
+  position:absolute!important;
+  left:50%!important;
+  top:-6px!important;
+  width:72px!important;
+  height:18px!important;
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(154,222,255,.38),rgba(112,186,255,.74),rgba(170,98,243,.92))!important;
+  border-radius:999px!important;
+  filter:drop-shadow(0 0 10px rgba(108,196,255,.48)) drop-shadow(0 0 18px rgba(168,98,243,.26));
+  transform-origin:right center!important;
+  animation:nx53Meteor 3.4s cubic-bezier(.22,.61,.2,.99) infinite!important;
+}
+.nx52-shooting-star:before{
+  content:"✦";
+  position:absolute;
+  right:-5px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:20px;
+  line-height:1;
+  color:#fff;
+  text-shadow:0 0 8px rgba(110,203,255,.75),0 0 18px rgba(171,101,244,.6);
+}
+.nx52-shooting-star:after{
+  content:""!important;
+  position:absolute;
+  left:-8px;
+  top:50%;
+  transform:translateY(-50%);
+  width:16px;height:2px;border-radius:999px;
+  background:rgba(255,255,255,.22);
+  box-shadow:-10px 0 0 rgba(150,218,255,.10),-20px 0 0 rgba(150,218,255,.05);
+}
+
+@keyframes nx53Meteor{
+  0%{transform:translate(calc(-50% - 14px),-18px) rotate(112deg) scale(.78);opacity:0}
+  12%{opacity:1}
+  55%{transform:translate(calc(-50% + 4px),38px) rotate(112deg) scale(1)}
+  76%{transform:translate(calc(-50% + 12px),60px) rotate(112deg) scale(1.02);opacity:1}
+  100%{transform:translate(calc(-50% + 18px),84px) rotate(112deg) scale(.9);opacity:0}
+}
+
+/* Add gentle graphics to Why Nexarvia / final CTA. */
+#principles .nx47-info-card:after{
+  content:"";
+  position:absolute;
+  right:-18px;top:-18px;
+  width:90px;height:90px;border-radius:50%;
+  background:radial-gradient(circle,rgba(28,146,255,.12),rgba(158,89,241,.06) 46%,transparent 68%);
+  pointer-events:none;opacity:.55;
+}
+#principles .nx47-info-card.is-active:before{
+  content:"";
+  position:absolute;left:-42%;top:0;bottom:0;width:26%;
+  background:linear-gradient(105deg,transparent,rgba(37,149,255,.10),transparent);
+  transform:skewX(-18deg);
+  animation:nx53Sweep 1s ease 1;
+}
+
+.nx47-final-box{
+  box-shadow:0 18px 60px rgba(5,19,42,.22), inset 0 0 0 1px rgba(116,176,255,.10)!important;
+}
+.nx47-final-box:after{
+  content:"";
+  position:absolute;inset:auto -24% -40% auto;width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(35,148,255,.20),rgba(165,92,243,.12) 42%,transparent 68%);
+  animation:nx53FloatGlow 9s ease-in-out infinite;
+  pointer-events:none;
+}
+
+@keyframes nx53Sweep{
+  0%{left:-42%;opacity:0}
+  18%{opacity:1}
+  100%{left:122%;opacity:0}
+}
+@keyframes nx53FloatGlow{
+  0%,100%{transform:translate3d(0,0,0) scale(1);opacity:.52}
+  50%{transform:translate3d(-12px,-8px,0) scale(1.08);opacity:.76}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .nx52-shooting-star,
+  .nx47-final-box:after,
+  #principles .nx47-info-card.is-active:before{animation:none!important}
+}
