@@ -1,0 +1,17 @@
+NEXARVIA TECHNOLOGIES — V48 MOBILE MOTION UPDATE
+
+Base: V47 Corporate Homepage + Auto Swipe
+
+Mobile refinements:
+- Path carousel re-centred and moved upward for a cleaner single-screen view.
+- Learning / Technology Services automatically shift every 2 seconds.
+- Smooth 500ms card-shifting transition with depth/settle feedback.
+- Manual swipe, arrows and dot navigation retained.
+- Horizontal page scrolling locked; page navigation remains vertical-only.
+- Path cards use a compact fixed/clamped mobile height so the CTA stays visible higher in the viewport.
+- Extra vertical-scroll reveal motion added to About, Capabilities, Why Nexarvia, Approach, Mission & Vision, Audience and final CTA.
+- Lightweight animated section accents and approach progress line added.
+- Mobile bottom safe spacing improved around the fixed navigation.
+- Reduced-motion accessibility remains supported.
+
+Desktop layout and the existing Nexarvia blue/purple brand theme remain unchanged.
