@@ -1,8 +1,0 @@
-NEXARVIA V46 — VERIFIED LIVE PRESENCE + DATA DELETE FIX
-
-- Live visitor count requires V46 trackerVersion, a recent heartbeat, visible page and focused window.
-- Legacy/stale visitor records cannot increase the live count.
-- Admin browsers are excluded from public Learning visitor tracking while the admin session is active.
-- Heartbeat lease: 8-second heartbeat, 24-second expiry.
-- Bulk deletion no longer reads /referralCodes at parent level. It derives known codes from authenticated referral/application data and deletes child paths directly.
-- Included Firebase rules also allow authenticated referralCodes parent management.
